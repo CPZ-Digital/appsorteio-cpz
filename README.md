@@ -181,8 +181,8 @@ qa.sorteio-cpz/
 
 ---
 
-<table width="100%" bgcolor="white"><tr><td align="center" style="padding: 16px;">
+<div align="center">
   <img src="cpz-assinatura.png" alt="CPZ" width="200" />
-  <br/>
-  <sub>Feito com dedicação para a galera da Quadra Azul</sub>
-</td></tr></table>
+
+  Feito com dedicação para a galera da Quadra Azul
+</div>
