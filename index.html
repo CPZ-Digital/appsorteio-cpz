@@ -4,44 +4,66 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Volley Team Sorter Pro</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='80' fill='%230A84FF'>V</text></svg>" type="image/svg+xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='80'>🏐</text></svg>" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0d2146">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
     color-scheme:light;
-    --bg:#f4f6f8;
+    --bg:#eef1f6;
     --surface:#ffffff;
-    --surface-soft:#f7f8fb;
-    --surface-strong:#e7ebf2;
-    --line:#d8dee7;
-    --text:#111827;
-    --muted:#5b6674;
-    --accent:#0A84FF;
-    --accent-strong:#0055CC;
+    --surface-soft:#f5f7fa;
+    --surface-strong:#e4e9f2;
+    --line:#d0d7e3;
+    --text:#0f172a;
+    --muted:#64748b;
+    --accent:#2563eb;
+    --accent-strong:#1d4ed8;
     --accent-soft:#dbeafe;
-    --positive:#22c55e;
-    --warning:#fbbf24;
-    --danger:#ef4444;
-    --shadow:0 18px 48px rgba(15,23,42,0.12);
+    --positive:#16a34a;
+    --positive-soft:#dcfce7;
+    --warning:#d97706;
+    --warning-soft:#fef3c7;
+    --danger:#dc2626;
+    --danger-soft:#fee2e2;
+    --shadow:0 20px 60px rgba(15,23,42,0.13);
+    --header-from:#0d2146;
+    --header-to:#1a3a6e;
+    --font:'Inter', system-ui, -apple-system, sans-serif;
+    --team1:#2563eb; --team1-soft:#dbeafe;
+    --team2:#ea580c; --team2-soft:#ffedd5;
+    --team3:#16a34a; --team3-soft:#dcfce7;
+    --team4:#7c3aed; --team4-soft:#ede9fe;
 }
 
 html[data-theme='dark']{
     color-scheme:dark;
-    --bg:#121212;
-    --surface:#1e1e1e;
-    --surface-soft:#181818;
-    --surface-strong:#242424;
-    --line:#2d2d2d;
-    --text:#edf2f7;
+    --bg:#0a0f1e;
+    --surface:#131929;
+    --surface-soft:#0f1522;
+    --surface-strong:#1c2438;
+    --line:#232d42;
+    --text:#e2e8f0;
     --muted:#94a3b8;
-    --accent:#0A84FF;
-    --accent-strong:#3b9bff;
-    --accent-soft:#1a3050;
-    --positive:#4ade80;
-    --warning:#fbbf24;
+    --accent:#3b82f6;
+    --accent-strong:#60a5fa;
+    --accent-soft:#1e3a5f;
+    --positive:#22c55e;
+    --positive-soft:#14532d;
+    --warning:#f59e0b;
+    --warning-soft:#451a03;
     --danger:#f87171;
-    --shadow:0 18px 48px rgba(0,0,0,0.35);
+    --danger-soft:#450a0a;
+    --shadow:0 20px 60px rgba(0,0,0,0.45);
+    --header-from:#060d1f;
+    --header-to:#0d2146;
+    --team1:#3b82f6; --team1-soft:#1e3a5f;
+    --team2:#f97316; --team2-soft:#431407;
+    --team3:#22c55e; --team3-soft:#14532d;
+    --team4:#a78bfa; --team4-soft:#2e1065;
 }
 
 *{ box-sizing:border-box; }
@@ -49,9 +71,9 @@ html[data-theme='dark']{
 body{
     margin:0;
     min-height:100vh;
-    background:linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+    background:var(--bg);
     color:var(--text);
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:var(--font);
 }
 
 button, input, select, textarea{ font:inherit; }
@@ -59,129 +81,177 @@ button{ border:none; cursor:pointer; }
 h1, h2, h3, p{ margin:0; }
 
 .app{
-    width:min(100%, 840px);
-    padding:16px 0;
+    width:min(100%, 860px);
     margin:0 auto;
+    padding-bottom:24px;
 }
 
+/* ── HEADER ── */
 .topbar{
+    background:linear-gradient(135deg, var(--header-from) 0%, var(--header-to) 100%);
+    padding:18px 20px 16px;
     display:flex;
-    flex-direction:row;
-    align-items:center;
-    gap:12px;
-    padding:12px 16px;
+    flex-direction:column;
+    gap:14px;
+    position:relative;
+    overflow:hidden;
+}
+
+.topbar::before{
+    content:'🏐';
+    position:absolute;
+    right:-10px;
+    top:-14px;
+    font-size:100px;
+    opacity:0.07;
+    pointer-events:none;
+    user-select:none;
 }
 
 .brand{
-    flex:1;
     display:flex;
-    align-items:center;
-    min-width:0;
+    flex-direction:column;
+    gap:2px;
 }
 
 .brand h1{
-    font-size:18px;
-    font-weight:800;
-    color:var(--text);
+    font-size:20px;
+    font-weight:900;
+    color:#fff;
+    letter-spacing:-0.3px;
 }
 
-.status-strip{
+.brand-sub{
+    font-size:12px;
+    color:rgba(255,255,255,0.55);
+    font-weight:500;
+}
+
+.stats-row{
     display:flex;
-    flex-direction:column;
-    gap:4px;
-    align-items:flex-end;
-    width:min(140px, 40vw);
-    flex-shrink:0;
+    gap:8px;
 }
 
-.stat{
+.stat-pill{
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    min-height:0;
-    padding:6px 10px;
-    width:100%;
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:8px;
-    white-space:nowrap;
-    box-sizing:border-box;
+    gap:6px;
+    padding:6px 12px;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:100px;
+    backdrop-filter:blur(4px);
 }
 
-.stat span{
-    display:block;
-    color:var(--muted);
-    font-size:9px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-    margin:0;
+.stat-pill span{
+    font-size:11px;
+    color:rgba(255,255,255,0.6);
+    font-weight:600;
 }
 
-.stat strong{
-    display:block;
-    font-size:16px;
+.stat-pill strong{
+    font-size:15px;
     font-weight:800;
+    color:#fff;
     line-height:1;
-    margin:0;
 }
 
+/* ── LAYOUT ── */
 .main-grid{
     display:grid;
     grid-template-columns:1fr;
-    gap:16px;
-    padding:0 16px;
+    gap:14px;
+    padding:14px 14px 0;
 }
 
 .panel{
     background:var(--surface);
     border:1px solid var(--line);
-    box-shadow:0 16px 32px rgba(15,23,42,0.07);
+    box-shadow:0 4px 24px rgba(15,23,42,0.06);
     border-radius:16px;
     overflow:hidden;
 }
 
 .panel-head{
     display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
+    align-items:center;
     gap:10px;
-    padding:12px;
+    padding:13px 14px;
     border-bottom:1px solid var(--line);
+    background:var(--surface-soft);
 }
 
-.panel-head h2{
+.panel-icon{
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-size:15px;
+    flex-shrink:0;
+}
+
+.panel-head-text{ flex:1; min-width:0; }
+
+.panel-head h2{
+    font-size:14px;
     font-weight:800;
+    letter-spacing:-0.1px;
 }
 
 .hint{
     color:var(--muted);
     font-size:11px;
-    margin-top:3px;
-    line-height:1.45;
+    margin-top:2px;
+    line-height:1.4;
 }
 
+/* ── BUTTONS ── */
 .btn{
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:8px;
-    min-height:36px;
-    padding:8px 14px;
+    gap:6px;
+    min-height:38px;
+    padding:9px 16px;
     border-radius:10px;
     color:#fff;
     background:var(--accent);
-    font-weight:800;
+    font-weight:700;
     font-size:14px;
+    letter-spacing:-0.1px;
+    transition:filter 120ms, transform 80ms;
 }
 
+.btn:active{ transform:scale(0.97); }
+.btn:hover{ filter:brightness(1.08); }
 .btn.secondary{ color:var(--text); background:var(--surface-strong); }
-.btn.warning{ color:#171006; background:var(--warning); }
-.btn.danger{ color:#fff; background:#dc2626; }
-.btn:disabled{ cursor:not-allowed; filter:grayscale(0.6); opacity:0.55; }
+.btn.warning{ color:#fff; background:#d97706; }
+.btn.success{ color:#fff; background:var(--positive); }
+.btn.danger{ color:#fff; background:var(--danger); }
+.btn:disabled{ cursor:not-allowed; filter:grayscale(0.6); opacity:0.5; }
 
+.btn-draw{
+    background:linear-gradient(135deg, #d97706, #f59e0b);
+    color:#fff;
+    font-weight:800;
+    font-size:15px;
+    min-height:48px;
+    border-radius:12px;
+    box-shadow:0 4px 16px rgba(217,119,6,0.35);
+}
+
+.btn-draw:hover{ filter:brightness(1.06); }
+
+.btn-redraw{
+    background:linear-gradient(135deg, var(--accent), var(--accent-strong));
+    box-shadow:0 4px 16px rgba(37,99,235,0.3);
+}
+
+/* ── PLAYER GRID ── */
 .player-grid{
     display:grid;
     grid-template-columns:repeat(3, minmax(0, 1fr));
@@ -194,97 +264,132 @@ h1, h2, h3, p{ margin:0; }
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    min-height:68px;
-    padding:10px;
-    border-radius:10px;
+    min-height:74px;
+    padding:10px 10px 8px;
+    border-radius:12px;
     background:var(--surface-soft);
-    border:1px solid var(--line);
+    border:1.5px solid var(--line);
     cursor:pointer;
     user-select:none;
     -webkit-tap-highlight-color:transparent;
-    transition:border-color 100ms, background 100ms;
+    transition:border-color 120ms, background 120ms, box-shadow 120ms;
 }
 
-.player-card:active{ transform:scale(0.97); }
+.player-card:active{ transform:scale(0.96); }
 
 .player-card.selected{
-    background:linear-gradient(135deg, rgba(10,132,255,0.14), rgba(59,155,255,0.08));
+    background:var(--accent-soft);
     border-color:var(--accent);
-    border-left-width:3px;
+    box-shadow:0 0 0 1px var(--accent);
 }
 
 .player-card.add-card{
     display:grid;
     place-items:center;
-    min-height:62px;
-    font-size:20px;
+    min-height:74px;
+    font-size:22px;
     font-weight:700;
     color:var(--muted);
     background:transparent;
-    border:1.5px dashed var(--line);
+    border:2px dashed var(--line);
 }
 
 .player-card.add-card:hover{
     border-color:var(--accent);
     color:var(--accent);
+    background:var(--accent-soft);
 }
 
 .player-name{
     display:block;
-    font-size:14px;
+    font-size:13px;
     font-weight:800;
     line-height:1.2;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
     color:var(--text);
+    padding-right:16px;
+}
+
+.player-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:6px;
 }
 
 .player-role{
-    display:block;
-    font-size:11px;
+    font-size:10px;
     color:var(--muted);
-    margin-top:3px;
     font-weight:600;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
+
+.skill-dots{
+    display:flex;
+    gap:2px;
+    flex-shrink:0;
+}
+
+.skill-dot{
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--line);
+}
+
+.skill-dot.on-low{ background:#ef4444; }
+.skill-dot.on-mid{ background:#f59e0b; }
+.skill-dot.on-high{ background:#16a34a; }
 
 .player-edit{
     all:unset;
     position:absolute;
-    top:4px;
-    right:4px;
-    font-size:18px;
+    top:5px;
+    right:5px;
+    font-size:14px;
     color:var(--muted);
     cursor:pointer;
     line-height:1;
-    padding:4px;
+    padding:3px;
+    border-radius:4px;
 }
 
-.player-edit:active{ color:var(--accent); }
+.player-edit:hover{ color:var(--accent); background:var(--accent-soft); }
 
+/* ── ACTIONS BAR ── */
 .actions-bar{
     display:flex;
     gap:8px;
     padding:10px 12px 14px;
 }
 
-.actions-bar .btn{
-    flex:1;
-    min-height:44px;
-    font-size:14px;
-}
+.actions-bar .btn{ flex:1; }
 
+/* ── EMPTY STATE ── */
 .empty{
-    display:grid;
-    place-items:center;
-    min-height:240px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:220px;
     padding:24px;
     color:var(--muted);
     text-align:center;
     line-height:1.5;
-    font-size:14px;
+    font-size:13px;
 }
 
+.empty-icon{
+    font-size:40px;
+    opacity:0.4;
+}
+
+/* ── TEAMS ── */
 .teams-grid{
     display:grid;
     grid-template-columns:1fr;
@@ -300,44 +405,59 @@ h1, h2, h3, p{ margin:0; }
 }
 
 .team-header{
-    padding:10px;
-    background:var(--surface);
-    border-bottom:1px solid var(--line);
+    padding:10px 12px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:8px;
+    border-bottom:1px solid var(--line);
+}
+
+.team-color-bar{
+    width:4px;
+    height:100%;
+    border-radius:2px;
+    flex-shrink:0;
+    align-self:stretch;
 }
 
 .team-title{
     flex:1;
     font-size:14px;
     font-weight:800;
+    letter-spacing:-0.1px;
 }
 
 .team-stats{
     display:flex;
     gap:6px;
-    font-size:12px;
+    flex-shrink:0;
 }
 
 .stat-badge{
-    padding:4px 8px;
-    background:var(--line);
-    border-radius:6px;
-    color:var(--muted);
+    padding:3px 8px;
+    border-radius:20px;
+    font-size:11px;
     font-weight:700;
+}
+
+.team-positions{
+    padding:6px 12px;
+    font-size:11px;
+    color:var(--muted);
+    border-bottom:1px solid var(--line);
+    font-weight:500;
 }
 
 .team-body{
     display:grid;
-    gap:6px;
+    gap:5px;
     padding:8px;
 }
 
 .team-player{
     display:grid;
-    grid-template-columns:auto 1fr auto;
+    grid-template-columns:28px 1fr auto;
     gap:8px;
     align-items:center;
     min-height:36px;
@@ -351,17 +471,16 @@ h1, h2, h3, p{ margin:0; }
     display:flex;
     align-items:center;
     justify-content:center;
-    width:20px;
-    height:20px;
-    border-radius:5px;
-    font-size:10px;
+    width:22px;
+    height:22px;
+    border-radius:6px;
+    font-size:11px;
     font-weight:900;
-    background:var(--line);
-    color:var(--text);
 }
 
 .team-player strong{
     font-size:13px;
+    font-weight:700;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
@@ -370,15 +489,14 @@ h1, h2, h3, p{ margin:0; }
 .player-role-badge{
     display:inline-flex;
     align-items:center;
-    justify-content:center;
-    padding:2px 6px;
-    border-radius:6px;
+    padding:2px 7px;
+    border-radius:20px;
     font-size:10px;
     font-weight:700;
-    background:var(--accent-soft);
-    color:var(--accent);
+    white-space:nowrap;
 }
 
+/* ── MODAL ── */
 .modal{
     position:fixed;
     inset:0;
@@ -386,19 +504,20 @@ h1, h2, h3, p{ margin:0; }
     align-items:center;
     justify-content:center;
     padding:16px;
-    background:rgba(0,0,0,0.55);
+    background:rgba(0,0,0,0.6);
     z-index:20;
+    backdrop-filter:blur(2px);
 }
 
 .modal.show{ display:flex; }
 
 .dialog{
-    width:min(380px, 100%);
+    width:min(400px, 100%);
     background:var(--surface);
     border:1px solid var(--line);
-    border-radius:14px;
+    border-radius:16px;
     box-shadow:var(--shadow);
-    max-height:90vh;
+    max-height:92vh;
     overflow-y:auto;
 }
 
@@ -407,35 +526,37 @@ h1, h2, h3, p{ margin:0; }
     align-items:center;
     justify-content:space-between;
     gap:8px;
-    padding:12px;
+    padding:14px 14px 12px;
     border-bottom:1px solid var(--line);
     position:sticky;
     top:0;
     background:var(--surface);
+    z-index:1;
 }
 
 .dialog-head h2{
     font-size:15px;
     font-weight:800;
+    letter-spacing:-0.2px;
 }
 
 .close-btn{
     all:unset;
-    width:32px;
-    height:32px;
+    width:30px;
+    height:30px;
     display:flex;
     align-items:center;
     justify-content:center;
     border-radius:8px;
     background:var(--surface-strong);
     cursor:pointer;
-    color:var(--text);
-    font-weight:700;
+    color:var(--muted);
+    font-size:13px;
 }
 
-.dialog-body{
-    padding:12px;
-}
+.close-btn:hover{ color:var(--text); }
+
+.dialog-body{ padding:14px; }
 
 .form-group{
     display:grid;
@@ -449,7 +570,7 @@ label{
     font-size:10px;
     font-weight:700;
     text-transform:uppercase;
-    letter-spacing:0.04em;
+    letter-spacing:0.06em;
 }
 
 input[type="text"],
@@ -457,26 +578,27 @@ input[type="number"],
 select,
 textarea{
     width:100%;
-    min-height:36px;
-    padding:8px 10px;
+    min-height:38px;
+    padding:9px 11px;
     color:var(--text);
     background:var(--surface-soft);
-    border:1px solid var(--line);
-    border-radius:8px;
+    border:1.5px solid var(--line);
+    border-radius:9px;
     outline:none;
+    font-weight:500;
 }
 
 input:focus,
 select:focus,
 textarea:focus{
     border-color:var(--accent);
-    box-shadow:0 0 0 2px rgba(10,132,255,0.22);
+    box-shadow:0 0 0 3px rgba(37,99,235,0.15);
 }
 
 textarea{
     min-height:60px;
     resize:vertical;
-    font-family:Arial, sans-serif;
+    font-family:var(--font);
 }
 
 .form-row{
@@ -485,9 +607,7 @@ textarea{
     gap:10px;
 }
 
-.form-group-full{
-    grid-column:1 / -1;
-}
+.form-group-full{ grid-column:1 / -1; }
 
 .checkbox-group{
     display:grid;
@@ -499,11 +619,11 @@ textarea{
     all:unset;
     display:flex;
     align-items:center;
-    gap:6px;
-    padding:8px 10px;
-    border-radius:8px;
+    gap:7px;
+    padding:9px 11px;
+    border-radius:9px;
     background:var(--surface-soft);
-    border:1px solid var(--line);
+    border:1.5px solid var(--line);
     cursor:pointer;
     font-weight:600;
     font-size:13px;
@@ -520,17 +640,11 @@ textarea{
     display:flex;
     align-items:center;
     justify-content:center;
+    flex-shrink:0;
 }
 
-.checkbox-option input:checked{
-    background:var(--accent);
-    border-color:var(--accent);
-}
-
-.checkbox-option:has(input:checked){
-    background:rgba(10,132,255,0.12);
-    border-color:var(--accent);
-}
+.checkbox-option input:checked{ background:var(--accent); border-color:var(--accent); }
+.checkbox-option:has(input:checked){ background:var(--accent-soft); border-color:var(--accent); }
 
 .dialog-actions{
     display:grid;
@@ -543,70 +657,57 @@ textarea{
 
 .star-rating{
     display:flex;
-    gap:6px;
-    margin-top:6px;
+    gap:5px;
+    margin-top:4px;
 }
 
 .star-btn{
     all:unset;
-    width:36px;
-    height:36px;
+    width:38px;
+    height:38px;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:8px;
+    border-radius:9px;
     background:var(--surface-soft);
-    border:1px solid var(--line);
+    border:1.5px solid var(--line);
     cursor:pointer;
-    font-size:16px;
+    font-size:17px;
     transition:all 100ms;
 }
 
-.star-btn:hover{
-    transform:scale(1.06);
-}
+.star-btn:hover{ transform:scale(1.08); }
+.star-btn.active{ background:var(--warning-soft); border-color:var(--warning); }
 
-.star-btn.active{
-    background:rgba(10,132,255,0.12);
-    border-color:var(--accent);
-    color:var(--accent);
-}
-
+/* ── RESPONSIVE ── */
 @media (max-width:600px){
-    .player-grid{
-        grid-template-columns:repeat(3, minmax(0, 1fr));
-    }
-
-    .teams-grid{
-        grid-template-columns:1fr;
-    }
+    .player-grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    .teams-grid{ grid-template-columns:1fr; }
 }
 
 @media (min-width:480px){
-    .player-grid{
-        grid-template-columns:repeat(4, minmax(0, 1fr));
-    }
+    .player-grid{ grid-template-columns:repeat(4, minmax(0, 1fr)); }
 }
 
 @media (min-width:640px){
-    .teams-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr));
-    }
+    .teams-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
 
+/* ── FOOTER ── */
 .footer-signature{
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:10px 16px 4px;
+    padding:18px 16px 8px;
 }
 
 .footer-signature img{
-    width:140px;
+    width:130px;
     height:auto;
     background:white;
-    border-radius:6px;
-    padding:4px 8px;
+    border-radius:8px;
+    padding:4px 10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 </style>
 </head>
@@ -614,45 +715,51 @@ textarea{
 <main class="app">
     <header class="topbar">
         <div class="brand">
-            <h1>Volley Team Sorter</h1>
+            <h1>🏐 Volley Team Sorter</h1>
+            <span class="brand-sub">Sorteio inteligente e equilibrado de times</span>
         </div>
-        <section class="status-strip">
-            <div class="stat">
+        <div class="stats-row">
+            <div class="stat-pill">
                 <span>Selecionados</span>
                 <strong id="statPlayers">0</strong>
             </div>
-            <div class="stat">
+            <div class="stat-pill">
                 <span>Times</span>
                 <strong id="statTeams">0</strong>
             </div>
-        </section>
+        </div>
     </header>
 
     <section class="main-grid">
         <section class="panel">
             <div class="panel-head">
-                <div>
+                <div class="panel-icon">👥</div>
+                <div class="panel-head-text">
                     <h2>Jogadores</h2>
-                    <p class="hint">Toque em um jogador para selecioná-lo. Clique em ··· para editar.</p>
+                    <p class="hint">Toque para selecionar · ··· para editar</p>
                 </div>
             </div>
             <div class="player-grid" id="playerGrid"></div>
             <div class="actions-bar">
-                <button class="btn warning" type="button" id="configBtn">⚙ Sortear</button>
-                <button class="btn" type="button" id="redrawBtn" style="display:none;">↺ Refazer</button>
+                <button class="btn btn-draw" type="button" id="configBtn">⚙ Sortear</button>
+                <button class="btn btn-redraw" type="button" id="redrawBtn" style="display:none;">↺ Refazer</button>
                 <button class="btn secondary" type="button" id="clearBtn">Limpar</button>
             </div>
         </section>
 
         <section class="panel" id="resultPanel" style="display:none;">
             <div class="panel-head">
-                <div>
-                    <h2>Resultado do sorteio</h2>
+                <div class="panel-icon">🏆</div>
+                <div class="panel-head-text">
+                    <h2>Times sorteados</h2>
                     <p class="hint" id="confidenceHint"></p>
                 </div>
             </div>
             <div id="result">
-                <div class="empty">Clique em "Sortear" para gerar times equilibrados.</div>
+                <div class="empty">
+                    <div class="empty-icon">🏐</div>
+                    Clique em "Sortear" para gerar times equilibrados.
+                </div>
             </div>
         </section>
     </section>
@@ -878,11 +985,15 @@ function renderPlayers(){
     grid.innerHTML = sorted.map(player => {
         const selected = selectedIds.includes(player.id);
         const role = POSITIONS[player.positionMain] || player.positionMain;
+        const skill = player.skill || 0;
+        const dotClass = skill <= 2 ? "on-low" : skill === 3 ? "on-mid" : "on-high";
+        const dots = Array.from({length:5}, (_, i) => `<span class="skill-dot ${i < skill ? dotClass : ""}"></span>`).join("");
         return `
             <div class="player-card ${selected ? "selected" : ""}" onclick="togglePlayer('${player.id}')">
-                <div>
-                    <span class="player-name">${escapeHtml(player.name)}</span>
+                <span class="player-name">${escapeHtml(player.name)}</span>
+                <div class="player-meta">
                     <span class="player-role">${role}</span>
+                    <div class="skill-dots">${dots}</div>
                 </div>
                 <button class="player-edit" type="button" onclick="event.stopPropagation();editPlayer('${player.id}')" title="Editar">···</button>
             </div>
@@ -896,6 +1007,7 @@ function renderPlayers(){
 
 function updateStats(){
     document.getElementById("statPlayers").textContent = selectedIds.length;
+    document.getElementById("statTeams").textContent = lastDraw ? lastDraw.teams.length : 0;
 }
 
 function togglePlayer(id){
@@ -1106,6 +1218,7 @@ function drawTeams(formation, mode, womenPercentage){
     lastDraw = { teams: bestTeams, score: bestScore, confidence: bestConfidence };
     renderTeams(bestTeams, bestConfidence, formation, mode);
     document.getElementById("resultPanel").style.display = "block";
+    updateStats();
 }
 
 function buildTeamsAttempt(pool, formation, mode, womenPercentage){
@@ -1240,32 +1353,41 @@ function renderTeams(teams, confidence, formation, mode){
     const confidenceText = getConfidenceLabel(confidence);
     document.getElementById("confidenceHint").textContent = `Índice de confiança: ${confidenceText} (${confidence}%)`;
 
+    const TEAM_COLORS = [
+        { color: "var(--team1)", soft: "var(--team1-soft)" },
+        { color: "var(--team2)", soft: "var(--team2-soft)" },
+        { color: "var(--team3)", soft: "var(--team3-soft)" },
+        { color: "var(--team4)", soft: "var(--team4-soft)" },
+    ];
+
     result.innerHTML = `
         <div class="teams-grid">
-            ${teams.map(team => {
+            ${teams.map((team, tIdx) => {
+                const tc = TEAM_COLORS[tIdx % TEAM_COLORS.length];
                 const strength = team.players.reduce((s, p) => s + p.skill, 0);
                 const positionCounts = {};
                 team.players.forEach(p => {
                     positionCounts[p.positionMain] = (positionCounts[p.positionMain] || 0) + 1;
                 });
-                const positions = Object.entries(positionCounts).map(([pos, count]) => `${POSITIONS[pos]}:${count}`).join(" | ");
+                const positions = Object.entries(positionCounts).map(([pos, count]) => `${POSITIONS[pos]} ×${count}`).join("  ·  ");
 
                 return `
-                    <div class="team">
-                        <div class="team-header">
-                            <div class="team-title">${team.name}</div>
+                    <div class="team" style="border-color:${tc.color}33;">
+                        <div class="team-header" style="background:${tc.soft}; border-bottom-color:${tc.color}33;">
+                            <div class="team-color-bar" style="background:${tc.color};"></div>
+                            <div class="team-title" style="color:${tc.color};">${team.name}</div>
                             <div class="team-stats">
-                                <span class="stat-badge">${team.players.length}</span>
-                                <span class="stat-badge">Força: ${strength}</span>
+                                <span class="stat-badge" style="background:${tc.color}22; color:${tc.color};">${team.players.length} jogadores</span>
+                                <span class="stat-badge" style="background:${tc.color}22; color:${tc.color};">⚡ ${strength}</span>
                             </div>
                         </div>
-                        <div style="padding:8px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--line);">${positions}</div>
+                        <div class="team-positions">${positions}</div>
                         <div class="team-body">
                             ${team.players.map((player, idx) => `
                                 <div class="team-player">
-                                    <div class="player-order">${idx + 1}</div>
+                                    <div class="player-order" style="background:${tc.color}20; color:${tc.color};">${idx + 1}</div>
                                     <strong>${escapeHtml(player.name)}</strong>
-                                    <span class="player-role-badge">${POSITIONS[player.positionMain] || player.positionMain}</span>
+                                    <span class="player-role-badge" style="background:${tc.color}18; color:${tc.color};">${POSITIONS[player.positionMain] || player.positionMain}</span>
                                 </div>
                             `).join("")}
                         </div>
