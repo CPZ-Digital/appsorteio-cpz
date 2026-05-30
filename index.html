@@ -1,15 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sorteio de Times de Volei</title>
-<link rel="icon" href="favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="favicon.png">
+<title>Volley Team Sorter Pro</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='80' fill='%230A84FF'>V</text></svg>" type="image/svg+xml">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0d2146">
 <style>
-/* VARIAVEIS */
 :root{
     color-scheme:light;
     --bg:#f4f6f8;
@@ -46,7 +44,6 @@ html[data-theme='dark']{
     --shadow:0 18px 48px rgba(0,0,0,0.35);
 }
 
-/* RESET */
 *{ box-sizing:border-box; }
 
 body{
@@ -57,13 +54,12 @@ body{
     font-family:Arial, Helvetica, sans-serif;
 }
 
-button, input{ font:inherit; }
+button, input, select, textarea{ font:inherit; }
 button{ border:none; cursor:pointer; }
 h1, h2, h3, p{ margin:0; }
 
-/* LAYOUT */
 .app{
-    width:min(100%, 760px);
+    width:min(100%, 840px);
     padding:16px 0;
     margin:0 auto;
 }
@@ -72,18 +68,10 @@ h1, h2, h3, p{ margin:0; }
     display:flex;
     flex-direction:row;
     align-items:center;
-    gap:8px;
-    padding:10px 16px;
+    gap:12px;
+    padding:12px 16px;
 }
 
-.main-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:16px;
-    padding:0 16px;
-}
-
-/* BRAND */
 .brand{
     flex:1;
     display:flex;
@@ -91,34 +79,18 @@ h1, h2, h3, p{ margin:0; }
     min-width:0;
 }
 
-.brand-mark{
-    flex:0 0 auto;
-    width:80px;
-    height:80px;
-    border-radius:10px;
-    background:transparent;
-    border:none;
-    box-shadow:none;
-    overflow:hidden;
+.brand h1{
+    font-size:18px;
+    font-weight:800;
+    color:var(--text);
 }
 
-.brand-mark img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    object-position:center;
-}
-
-html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
-.brand-copy{ display:none; }
-
-/* STATUS */
 .status-strip{
     display:flex;
     flex-direction:column;
     gap:4px;
     align-items:flex-end;
-    width:min(148px, 44vw);
+    width:min(140px, 40vw);
     flex-shrink:0;
 }
 
@@ -155,12 +127,19 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     margin:0;
 }
 
-/* PANEL */
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+    padding:0 16px;
+}
+
 .panel{
     background:var(--surface);
     border:1px solid var(--line);
     box-shadow:0 16px 32px rgba(15,23,42,0.07);
-    border-radius:24px;
+    border-radius:16px;
+    overflow:hidden;
 }
 
 .panel-head{
@@ -168,11 +147,14 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     align-items:flex-start;
     justify-content:space-between;
     gap:10px;
-    padding:10px 12px;
+    padding:12px;
     border-bottom:1px solid var(--line);
 }
 
-.panel-head h2{ font-size:15px; }
+.panel-head h2{
+    font-size:15px;
+    font-weight:800;
+}
 
 .hint{
     color:var(--muted);
@@ -181,70 +163,41 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     line-height:1.45;
 }
 
-/* BOTOES */
 .btn{
     display:flex;
     align-items:center;
     justify-content:center;
     gap:8px;
     min-height:36px;
-    padding:7px 13px;
+    padding:8px 14px;
     border-radius:10px;
-    color:#051015;
+    color:#fff;
     background:var(--accent);
-    font-weight:900;
+    font-weight:800;
+    font-size:14px;
 }
 
 .btn.secondary{ color:var(--text); background:var(--surface-strong); }
 .btn.warning{ color:#171006; background:var(--warning); }
-.btn.danger{ color:#fff; background:#812828; }
+.btn.danger{ color:#fff; background:#dc2626; }
 .btn:disabled{ cursor:not-allowed; filter:grayscale(0.6); opacity:0.55; }
 
-/* SELECTOR */
-.selector-panel{ margin-bottom:16px; }
-
-.check-pill input{
-    position:absolute;
-    opacity:0;
-    pointer-events:none;
-}
-
-.check-pill span{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:36px;
-    padding:7px 8px;
-    color:var(--muted);
-    background:var(--surface-soft);
-    border:1px solid var(--line);
-    border-radius:8px;
-    font-weight:800;
-}
-
-.check-pill input:checked + span{
-    color:#061114;
-    background:var(--accent);
-    border-color:var(--accent);
-}
-
-/* JOGADORES */
-.touchpad{
+.player-grid{
     display:grid;
     grid-template-columns:repeat(3, minmax(0, 1fr));
-    gap:7px;
-    padding:10px;
+    gap:8px;
+    padding:12px;
 }
 
-.touch-card{
+.player-card{
     position:relative;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    min-height:60px;
-    padding:8px 7px 6px 10px;
-    border-radius:8px;
-    background:var(--surface);
+    min-height:68px;
+    padding:10px;
+    border-radius:10px;
+    background:var(--surface-soft);
     border:1px solid var(--line);
     cursor:pointer;
     user-select:none;
@@ -252,29 +205,31 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     transition:border-color 100ms, background 100ms;
 }
 
-.touch-card:active{ transform:scale(0.97); }
+.player-card:active{ transform:scale(0.97); }
 
-.touch-card.selected{
+.player-card.selected{
     background:linear-gradient(135deg, rgba(10,132,255,0.14), rgba(59,155,255,0.08));
     border-color:var(--accent);
     border-left-width:3px;
 }
 
-.touch-card.add-card{
+.player-card.add-card{
     display:grid;
     place-items:center;
-    min-height:54px;
-    font-size:18px;
+    min-height:62px;
+    font-size:20px;
     font-weight:700;
     color:var(--muted);
     background:transparent;
     border:1.5px dashed var(--line);
-    border-radius:8px;
 }
 
-.touch-card.add-card:hover{ border-color:var(--accent); color:var(--accent); }
+.player-card.add-card:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+}
 
-.touch-name{
+.player-name{
     display:block;
     font-size:14px;
     font-weight:800;
@@ -285,240 +240,125 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     color:var(--text);
 }
 
-.card-footer{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-top:3px;
-}
-
-.player-badges{
-    display:flex;
-    gap:3px;
-    justify-content:flex-end;
-    align-self:flex-end;
-    min-height:16px;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:1px 5px;
-    border-radius:999px;
-    font-size:9px;
-    font-weight:900;
-    line-height:1.4;
-}
-
-.badge.woman{ background:rgba(236,72,153,0.16); color:#f472b6; }
-.badge.setter{ background:rgba(10,132,255,0.15); color:#0A84FF; }
-.selected .badge.woman{ background:rgba(236,72,153,0.28); color:#f472b6; }
-.selected .badge.setter{ background:rgba(10,132,255,0.25); color:#0A84FF; }
-
-.edit-dot-btn{
-    all:unset;
-    font-size:13px;
-    font-weight:900;
+.player-role{
+    display:block;
+    font-size:11px;
     color:var(--muted);
-    padding:0 3px;
-    border-radius:4px;
+    margin-top:3px;
+    font-weight:600;
+}
+
+.player-edit{
+    all:unset;
+    position:absolute;
+    top:4px;
+    right:4px;
+    font-size:18px;
+    color:var(--muted);
     cursor:pointer;
     line-height:1;
-    letter-spacing:1px;
-    flex-shrink:0;
+    padding:4px;
 }
 
-.edit-dot-btn:active{ background:var(--surface-strong); color:var(--accent); }
-.pill{ display:none; }
+.player-edit:active{ color:var(--accent); }
 
-/* ESTRELAS */
-.star{ font-size:14px; color:var(--line); }
-.star.active{ color:var(--accent-strong); }
-.rating-stars{ display:flex; gap:4px; margin-top:8px; }
-
-.star-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:38px;
-    height:38px;
-    border:none;
-    border-radius:10px;
-    background:var(--surface-soft);
-    color:var(--line);
-    font-size:16px;
-    cursor:pointer;
-    transition:transform 100ms ease, background-color 100ms ease, color 100ms ease;
-}
-
-.star-btn.active{ color:var(--accent-strong); background:rgba(10,132,255,0.12); }
-.star-btn:hover{ transform:scale(1.06); }
-
-/* BARRA SORTEAR */
-.selected-bar{
+.actions-bar{
     display:flex;
     gap:8px;
     padding:10px 12px 14px;
 }
 
-.selected-bar .btn{
+.actions-bar .btn{
     flex:1;
-    min-height:50px;
-    font-size:15px;
-    font-weight:700;
-    border-radius:14px;
+    min-height:44px;
+    font-size:14px;
 }
-
-/* RESULTADO */
-.draw-area{ min-height:200px; }
 
 .empty{
     display:grid;
     place-items:center;
-    min-height:300px;
-    padding:26px;
+    min-height:240px;
+    padding:24px;
     color:var(--muted);
     text-align:center;
     line-height:1.5;
+    font-size:14px;
 }
 
-.teams{
+.teams-grid{
     display:grid;
     grid-template-columns:1fr;
-    gap:8px;
-    padding:10px;
+    gap:10px;
+    padding:12px;
 }
 
-.teams.two{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
-
 .team{
-    border-radius:10px;
-    background:var(--surface);
+    border-radius:12px;
+    background:var(--surface-soft);
     border:1px solid var(--line);
     overflow:hidden;
 }
 
-.team.drop-target{ outline:2px solid var(--accent); outline-offset:3px; }
-
-.team-head{
-    padding:8px 10px;
-    background:var(--surface-soft);
+.team-header{
+    padding:10px;
+    background:var(--surface);
     border-bottom:1px solid var(--line);
-    border-radius:10px 10px 0 0;
-}
-
-.team-title{ display:flex; align-items:center; justify-content:space-between; gap:6px; }
-.team-title h3{ font-size:13px; font-weight:800; }
-
-.score{
-    border-radius:999px;
-    padding:2px 6px;
-    font-size:10px;
-    font-weight:900;
-    color:#fff;
-    background:var(--positive);
-}
-
-.team-meta{ display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
-
-.tag{
-    display:inline-flex;
+    display:flex;
     align-items:center;
-    padding:2px 7px;
-    border-radius:999px;
-    font-size:10px;
-    font-weight:700;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.team-title{
+    flex:1;
+    font-size:14px;
+    font-weight:800;
+}
+
+.team-stats{
+    display:flex;
+    gap:6px;
+    font-size:12px;
+}
+
+.stat-badge{
+    padding:4px 8px;
+    background:var(--line);
+    border-radius:6px;
     color:var(--muted);
+    font-weight:700;
+}
+
+.team-body{
+    display:grid;
+    gap:6px;
+    padding:8px;
+}
+
+.team-player{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:8px;
+    align-items:center;
+    min-height:36px;
+    padding:6px 8px;
+    border-radius:8px;
     background:var(--surface);
     border:1px solid var(--line);
 }
 
-.tag.woman{ background:rgba(244,114,182,0.15); color:#f9a8d4; border-color:transparent; }
-.tag.setter{ background:rgba(245,158,11,0.15); color:#fcd34d; border-color:transparent; }
-
-.team-list{ display:grid; gap:4px; padding:6px 8px 8px; }
-
-.team-player{
-    display:grid;
-    grid-template-columns:auto 1fr auto auto;
-    gap:6px;
-    align-items:center;
-    min-height:34px;
-    padding:5px 7px;
-    border-radius:7px;
-    background:var(--surface-soft);
-    border:1px solid var(--line);
-}
-
-.lock-btn{
+.player-order{
     display:flex;
     align-items:center;
     justify-content:center;
-    width:22px;
-    height:22px;
+    width:20px;
+    height:20px;
     border-radius:5px;
-    background:transparent;
-    border:1.5px solid var(--line);
-    color:var(--muted);
-    padding:0;
-    flex-shrink:0;
-    transition:background 100ms, border-color 100ms, color 100ms;
+    font-size:10px;
+    font-weight:900;
+    background:var(--line);
+    color:var(--text);
 }
-
-.lock-btn.locked{
-    background:var(--accent-soft);
-    border-color:var(--accent);
-    color:var(--accent);
-}
-
-.lock-btn:active{ transform:scale(0.88); }
-
-/* POPUP CADEADO */
-.lock-notice{
-    position:fixed;
-    bottom:24px;
-    left:50%;
-    transform:translateX(-50%);
-    display:none;
-    align-items:center;
-    gap:10px;
-    padding:10px 14px;
-    background:rgba(239,68,68,0.96);
-    color:#fff;
-    border-radius:10px;
-    font-size:13px;
-    font-weight:700;
-    max-width:min(340px, calc(100vw - 32px));
-    box-shadow:0 4px 20px rgba(0,0,0,0.25);
-    z-index:999;
-    white-space:normal;
-    line-height:1.4;
-}
-
-.lock-notice.show{ display:flex; }
-
-.lock-notice-close{
-    background:transparent;
-    border:none;
-    color:#fff;
-    font-size:18px;
-    font-weight:700;
-    line-height:1;
-    padding:0;
-    cursor:pointer;
-    flex-shrink:0;
-    opacity:0.85;
-}
-
-.lock-notice-close:hover{ opacity:1; }
-
-.team-player.swap-suggest{
-    background:rgba(245,158,11,0.12);
-    border-color:rgba(245,158,11,0.6);
-}
-
-.team-player.drag-ready{ outline:2px solid var(--accent); }
 
 .team-player strong{
     font-size:13px;
@@ -527,109 +367,25 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     white-space:nowrap;
 }
 
-.order{
-    display:grid;
-    place-items:center;
-    width:20px;
-    height:20px;
-    border-radius:5px;
-    font-size:10px;
-    font-weight:900;
-    background:var(--surface);
-    color:var(--muted);
-}
-
-.swap-label{
-    color:#171006;
-    background:var(--warning);
-    border-radius:999px;
-    padding:2px 7px;
-    font-size:10px;
-    font-weight:900;
-}
-
-/* RESUMO */
-.summary{
-    display:none;
-    grid-template-columns:repeat(4, 1fr);
-    gap:8px;
-    padding:0 16px 16px;
-}
-
-.summary.show{ display:grid; }
-
-.summary-item{
-    padding:10px;
-    background:var(--surface-soft);
-    border:1px solid var(--line);
-    border-radius:10px;
-}
-
-.summary-item span{
-    display:block;
-    color:var(--muted);
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.04em;
-}
-
-.summary-item strong{
-    display:block;
-    margin-top:4px;
-    font-size:18px;
-    font-weight:800;
-}
-
-.summary-copy{
-    cursor:pointer;
-    border-color:var(--accent);
-    justify-content:center;
-    transition:background 100ms, transform 100ms;
-}
-
-.summary-copy strong{ color:var(--accent); margin-top:0; }
-.summary-copy:hover{ background:var(--accent-soft); }
-.summary-copy:active{ transform:scale(0.96); }
-
-/* AVISO */
-.notice{
-    display:none;
-    margin:12px 16px 0;
-    padding:11px 12px;
-    color:#fed7aa;
-    background:rgba(245,158,11,0.14);
-    border:1px solid rgba(245,158,11,0.34);
-    border-radius:8px;
-    line-height:1.4;
-}
-
-.notice.show{ display:block; }
-
-/* RODAPE */
-.footer-signature{
-    display:flex;
+.player-role-badge{
+    display:inline-flex;
     align-items:center;
     justify-content:center;
-    padding:10px 16px 4px;
-}
-
-.footer-signature img{
-    width:140px;
-    height:auto;
-    background:white;
+    padding:2px 6px;
     border-radius:6px;
-    padding:4px 8px;
+    font-size:10px;
+    font-weight:700;
+    background:var(--accent-soft);
+    color:var(--accent);
 }
 
-/* MODAL */
 .modal{
     position:fixed;
     inset:0;
     display:none;
     align-items:center;
     justify-content:center;
-    padding:12px;
+    padding:16px;
     background:rgba(0,0,0,0.55);
     z-index:20;
 }
@@ -637,11 +393,13 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
 .modal.show{ display:flex; }
 
 .dialog{
-    width:min(360px, 100%);
+    width:min(380px, 100%);
     background:var(--surface);
     border:1px solid var(--line);
     border-radius:14px;
     box-shadow:var(--shadow);
+    max-height:90vh;
+    overflow-y:auto;
 }
 
 .dialog-head{
@@ -649,18 +407,44 @@ html[data-theme='dark'] .brand-mark img{ filter:brightness(1.1); }
     align-items:center;
     justify-content:space-between;
     gap:8px;
-    padding:10px 12px;
+    padding:12px;
     border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    background:var(--surface);
 }
 
-.dialog-head h2{ font-size:15px; }
-.dialog-body{ padding:10px 12px 12px; }
-.form-grid{ display:grid; grid-template-columns:1fr; gap:8px; }
-.field-full{ grid-column:1 / -1; }
+.dialog-head h2{
+    font-size:15px;
+    font-weight:800;
+}
+
+.close-btn{
+    all:unset;
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    background:var(--surface-strong);
+    cursor:pointer;
+    color:var(--text);
+    font-weight:700;
+}
+
+.dialog-body{
+    padding:12px;
+}
+
+.form-group{
+    display:grid;
+    gap:6px;
+    margin-bottom:12px;
+}
 
 label{
     display:block;
-    margin-bottom:4px;
     color:var(--muted);
     font-size:10px;
     font-weight:700;
@@ -669,58 +453,145 @@ label{
 }
 
 input[type="text"],
-input[type="number"]{
+input[type="number"],
+select,
+textarea{
     width:100%;
     min-height:36px;
-    padding:7px 9px;
+    padding:8px 10px;
     color:var(--text);
     background:var(--surface-soft);
     border:1px solid var(--line);
-    border-radius:7px;
+    border-radius:8px;
     outline:none;
 }
 
-input:focus{
+input:focus,
+select:focus,
+textarea:focus{
     border-color:var(--accent);
     box-shadow:0 0 0 2px rgba(10,132,255,0.22);
 }
 
-.checkbox-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+textarea{
+    min-height:60px;
+    resize:vertical;
+    font-family:Arial, sans-serif;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.form-group-full{
+    grid-column:1 / -1;
+}
+
+.checkbox-group{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.checkbox-option{
+    all:unset;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 10px;
+    border-radius:8px;
+    background:var(--surface-soft);
+    border:1px solid var(--line);
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+    transition:all 100ms;
+}
+
+.checkbox-option input{
+    all:unset;
+    width:16px;
+    height:16px;
+    border:2px solid var(--line);
+    border-radius:4px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.checkbox-option input:checked{
+    background:var(--accent);
+    border-color:var(--accent);
+}
+
+.checkbox-option:has(input:checked){
+    background:rgba(10,132,255,0.12);
+    border-color:var(--accent);
+}
 
 .dialog-actions{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
+    grid-template-columns:1fr 1fr;
     gap:8px;
-    margin-top:10px;
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
 }
 
-.icon-btn{
-    width:34px;
-    height:34px;
+.star-rating{
+    display:flex;
+    gap:6px;
+    margin-top:6px;
+}
+
+.star-btn{
+    all:unset;
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     border-radius:8px;
-    color:var(--text);
     background:var(--surface-soft);
     border:1px solid var(--line);
+    cursor:pointer;
+    font-size:16px;
+    transition:all 100ms;
 }
 
-/* RESPONSIVO */
-@media (max-width:620px){
-    .summary{ grid-template-columns:repeat(2, 1fr); }
-    .dialog-actions{ grid-template-columns:1fr; }
+.star-btn:hover{
+    transform:scale(1.06);
 }
 
-@media (max-width:720px){
-    .panel-head{ flex-direction:column; }
+.star-btn.active{
+    background:rgba(10,132,255,0.12);
+    border-color:var(--accent);
+    color:var(--accent);
+}
+
+@media (max-width:600px){
+    .player-grid{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+    }
+
+    .teams-grid{
+        grid-template-columns:1fr;
+    }
 }
 
 @media (min-width:480px){
-    .touchpad{ grid-template-columns:repeat(4, minmax(0, 1fr)); }
-    .teams.four{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+    .player-grid{
+        grid-template-columns:repeat(4, minmax(0, 1fr));
+    }
 }
 
 @media (min-width:640px){
-    .teams{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
-    .teams.four{ grid-template-columns:repeat(4, minmax(0, 1fr)); }
+    .teams-grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
 }
 </style>
 </head>
@@ -728,16 +599,9 @@ input:focus{
 <main class="app">
     <header class="topbar">
         <div class="brand">
-            <div class="brand-mark">
-                <img src="assinatura.png" alt="Quadra Azul logo">
-            </div>
-            <div class="brand-copy">
-                <h1>Sorteio de Times</h1>
-                <p class="subtitle">Toque nos nomes de quem vai jogar hoje e sorteie times equilibrados.</p>
-            </div>
+            <h1>Volley Team Sorter</h1>
         </div>
-
-        <section class="status-strip" aria-label="Resumo dos jogadores selecionados">
+        <section class="status-strip">
             <div class="stat">
                 <span>Selecionados</span>
                 <strong id="statPlayers">0</strong>
@@ -750,1048 +614,640 @@ input:focus{
     </header>
 
     <section class="main-grid">
-        <section class="panel selector-panel">
+        <section class="panel">
             <div class="panel-head">
                 <div>
-                    <h2>Quem vai jogar?</h2>
-                    <p class="hint">Toque em ··· para editar um jogador.</p>
+                    <h2>Jogadores</h2>
+                    <p class="hint">Toque em um jogador para selecioná-lo. Clique em ··· para editar.</p>
                 </div>
-
             </div>
-
-            <div class="touchpad" id="playersGrid"></div>
-
-            <div class="selected-bar">
-                <span id="selectedNames" hidden></span>
-                <button class="btn warning" type="button" id="drawBtn">Sortear times</button>
-                <button class="btn secondary" type="button" id="selectNoneBtn">Desmarcar todos</button>
+            <div class="player-grid" id="playerGrid"></div>
+            <div class="actions-bar">
+                <button class="btn warning" type="button" id="configBtn">⚙ Sortear</button>
+                <button class="btn secondary" type="button" id="clearBtn">Limpar</button>
             </div>
         </section>
 
-        <section class="panel draw-area">
+        <section class="panel" id="resultPanel" style="display:none;">
             <div class="panel-head">
                 <div>
-                    <h2>Resultado</h2>
-                    <p class="hint">O sorteio tenta equilibrar os times com base em nota e levantadores. Se tiver levantador suficiente, coloca pelo menos 1 em cada time.</p>
+                    <h2>Resultado do sorteio</h2>
+                    <p class="hint" id="confidenceHint"></p>
                 </div>
             </div>
-
-            <div class="notice" id="notice"></div>
-
             <div id="result">
-                <div class="empty">
-                    Selecione quem vai jogar e clique em sortear.
-                </div>
+                <div class="empty">Clique em "Sortear" para gerar times equilibrados.</div>
             </div>
-
-            <div class="summary" id="summary"></div>
         </section>
     </section>
 
-    <div class="lock-notice" id="lockNotice">
-        <span id="lockNoticeText"></span>
-        <button class="lock-notice-close" type="button" onclick="hideLockNotice()" aria-label="Fechar">Ã—</button>
-    </div>
-
-    <footer class="footer-signature">
-        <img src="cpz-assinatura.png">
-    </footer>
+    <footer></footer>
 </main>
 
-<div class="modal" id="playerModal" aria-hidden="true">
-    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal" id="playerModal">
+    <div class="dialog">
         <div class="dialog-head">
-            <h2 id="modalTitle">Adicionar jogador</h2>
-            <button class="icon-btn" type="button" id="closeModalBtn" title="Fechar">X</button>
+            <h2 id="modalTitle">Novo jogador</h2>
+            <button class="close-btn" id="closeModal">✕</button>
         </div>
+        <form id="playerForm" class="dialog-body">
+            <div class="form-group form-group-full">
+                <label for="playerName">Nome *</label>
+                <input id="playerName" type="text" maxlength="50" required placeholder="Ex: João Silva">
+            </div>
 
-        <div class="dialog-body">
-            <form id="playerForm" autocomplete="off">
-                <div class="form-grid">
-                    <div class="field-full">
-                        <label for="playerName">Nome</label>
-                        <input id="playerName" type="text" maxlength="34" placeholder="Ex: Ana, Pedro, Luiza" required>
-                    </div>
+            <div class="form-group form-group-full">
+                <label>Nota Técnica (0-5) *</label>
+                <div class="star-rating" id="skillRating"></div>
+            </div>
 
-                    <div class="field-full">
-                        <label for="playerSkill">Nota</label>
-                        <input id="playerSkill" type="hidden" value="3" required>
-                        <div class="rating-stars" id="ratingStars" aria-label="Nota do jogador" role="radiogroup">
-                            <button type="button" class="star-btn" data-value="1" aria-label="1 estrela">★</button>
-                            <button type="button" class="star-btn" data-value="2" aria-label="2 estrelas">★</button>
-                            <button type="button" class="star-btn" data-value="3" aria-label="3 estrelas">★</button>
-                            <button type="button" class="star-btn" data-value="4" aria-label="4 estrelas">★</button>
-                            <button type="button" class="star-btn" data-value="5" aria-label="5 estrelas">★</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label>Funções</label>
-                        <div class="checkbox-grid">
-                            <label class="check-pill">
-                                <input type="checkbox" id="playerWoman">
-                                <span>M</span>
-                            </label>
-                            <label class="check-pill">
-                                <input type="checkbox" id="playerSetter">
-                                <span>L</span>
-                            </label>
-                        </div>
-                    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="positionMain">Posição Principal *</label>
+                    <select id="positionMain" required>
+                        <option value="">Selecione</option>
+                        <option value="levantador">Levantador</option>
+                        <option value="oposto">Oposto</option>
+                        <option value="ponteiro">Ponteiro</option>
+                        <option value="central">Central</option>
+                        <option value="libero">Líbero</option>
+                    </select>
                 </div>
 
-                <div class="dialog-actions">
-                    <button class="btn" type="submit" id="submitBtn">Salvar</button>
-                    <button class="btn danger" type="button" id="deletePlayerBtn">Excluir</button>
-                    <button class="btn secondary" type="button" id="cancelModalBtn">Cancelar</button>
+                <div class="form-group">
+                    <label for="positionSecond">Posição Secundária</label>
+                    <select id="positionSecond">
+                        <option value="">Nenhuma</option>
+                        <option value="levantador">Levantador</option>
+                        <option value="oposto">Oposto</option>
+                        <option value="ponteiro">Ponteiro</option>
+                        <option value="central">Central</option>
+                        <option value="libero">Líbero</option>
+                    </select>
                 </div>
-            </form>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="experience">Experiência *</label>
+                <select id="experience" required>
+                    <option value="">Selecione</option>
+                    <option value="iniciante">Iniciante</option>
+                    <option value="recreativo">Recreativo</option>
+                    <option value="intermediario">Intermediário</option>
+                    <option value="avancado">Avançado</option>
+                    <option value="competitivo">Competitivo</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="height">Altura (cm)</label>
+                    <input id="height" type="number" min="100" max="220" placeholder="Ex: 180">
+                </div>
+
+                <div class="form-group">
+                    <label for="availability">Disponibilidade</label>
+                    <select id="availability">
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="notes">Observações</label>
+                <textarea id="notes" placeholder="Notas adicionais..."></textarea>
+            </div>
+
+            <div class="dialog-actions">
+                <button class="btn" type="submit">Salvar</button>
+                <button class="btn secondary" type="button" id="deleteBtn" style="display:none;">Excluir</button>
+                <button class="btn danger" type="button" id="cancelBtn">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="configModal">
+    <div class="dialog" style="width:min(340px,100%);">
+        <div class="dialog-head">
+            <h2>Configurar sorteio</h2>
+            <button class="close-btn" id="closeConfigBtn">✕</button>
         </div>
+        <form id="configForm" class="dialog-body">
+            <div class="form-group form-group-full">
+                <label for="formationType">Formação</label>
+                <select id="formationType">
+                    <option value="5x1">5x1 (7 jogadores)</option>
+                    <option value="6x2">6x2 (8 jogadores)</option>
+                    <option value="4x2">4x2 (6 jogadores)</option>
+                    <option value="livre">Livre (sem posições obrigatórias)</option>
+                    <option value="areia">Areia 2x2 (2 jogadores)</option>
+                    <option value="quarteto">Quarteto 4x4 (4 jogadores)</option>
+                </select>
+            </div>
+
+            <div class="form-group form-group-full">
+                <label for="mode">Modo</label>
+                <select id="mode">
+                    <option value="pelada">Pelada (rápido e equilibrado)</option>
+                    <option value="treino">Treino (misturar forças)</option>
+                    <option value="campeonato">Campeonato (máxima competitividade)</option>
+                    <option value="misto">Misto (com % feminino)</option>
+                </select>
+            </div>
+
+            <div class="form-row" id="mixedModeOptions" style="display:none;">
+                <div class="form-group">
+                    <label for="womenPercentage">% Feminino por time</label>
+                    <select id="womenPercentage">
+                        <option value="0">0%</option>
+                        <option value="25">25%</option>
+                        <option value="33">33%</option>
+                        <option value="50">50%</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dialog-actions">
+                <button class="btn" type="submit" style="grid-column:1/-1;">Sortear!</button>
+                <button class="btn secondary" type="button" id="cancelConfigBtn" style="display:none;">Cancelar</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-const STORAGE_KEY = "volei-team-draw-players-v3";
-const OLD_STORAGE_KEY = "volei-team-draw-players-v1";
-const SELECTED_KEY = "volei-team-draw-selected-v2";
-const DRAW_KEY = "volei-team-draw-current-v1";
-const DRAW_TTL = 15 * 60 * 1000;
-const MAX_PER_TEAM = 6;
-const DEFAULT_PLAYERS = [
-    ["Adriano", 5, false, false],
-    ["Afonso", 3, false, false],
-    ["Andre", 5, false, false],
-    ["Bel", 2, true, false],
-    ["Bruno Rhiel", 4, false, true],
-    ["Caio", 3, false, false],
-    ["Carlinhos", 3, false, false],
-    ["Carlos (Ilha)", 3, false, false],
-    ["Daniel Nariz", 4, false, false],
-    ["Dudu", 1, false, false],
-    ["Eduardo", 3, false, false],
-    ["Eduardo BNK", 1, false, false],
-    ["Enzo", 3, false, true],
-    ["Fabricio", 2, false, false],
-    ["Fernando Ganeff", 2, false, false],
-    ["Fernando Henrique", 2, false, false],
-    ["Harisson", 5, false, false],
-    ["Heliomar", 2, false, false],
-    ["Hellen", 2, false, false],
-    ["Hudson", 4, false, false],
-    ["Iago", 3, false, false],
-    ["Joao Rosa", 5, false, false],
-    ["Jorge", 3, false, false],
-    ["Kay", 3, false, false],
-    ["Lais", 3, true, false],
-    ["Leo (LC)", 3, false, false],
-    ["Lincon", 5, false, false],
-    ["Luara", 2, false, false],
-    ["Lya", 1, true, false],
-    ["Manu", 3, true, false],
-    ["Mayara", 2, true, true],
-    ["Maycon", 4, false, false],
-    ["Paulo", 5, false, false],
-    ["Pereira", 4, false, false],
-    ["Rafael Custodio", 4, false, false],
-    ["Robert", 2, false, false],
-    ["Roberto", 4, false, false],
-    ["Sarah", 2, true, false],
-    ["Thiago BNK", 0, false, false],
-    ["Wesley", 5, false, false],
-    ["Zana", 2, true, true]
-];
+const STORAGE_KEY = "volley-sorter-players-v1";
+const SELECTED_KEY = "volley-sorter-selected-v1";
 
-let roster = loadRoster();
-let selectedIds = loadSelectedIds();
+const POSITIONS = {
+    levantador: "Levantador",
+    oposto: "Oposto",
+    ponteiro: "Ponteiro",
+    central: "Central",
+    libero: "Líbero"
+};
+
+const FORMATIONS = {
+    "5x1": { size: 7, required: { levantador: 1, oposto: 1, ponteiro: 2, central: 2, libero: 1 } },
+    "6x2": { size: 8, required: { levantador: 2, oposto: 1, ponteiro: 2, central: 2, libero: 1 } },
+    "4x2": { size: 6, required: { levantador: 2, oposto: 1, ponteiro: 2, central: 1, libero: 0 } },
+    "livre": { size: -1, required: {} },
+    "areia": { size: 2, required: {} },
+    "quarteto": { size: 4, required: {} }
+};
+
+let players = [];
+let selectedIds = [];
 let editingId = null;
-let lastDraw = loadSavedDraw();
-let dragState = null;
-let swapSuggestion = null;
-let holdTimer = null;
-let lockedPlayers = {};
-let activeDragElement = null;
-let currentDropTeamIndex = null;
+let lastDraw = null;
 
-const playersGrid = document.getElementById("playersGrid");
-const selectedNames = document.getElementById("selectedNames");
-const result = document.getElementById("result");
-const summary = document.getElementById("summary");
-const notice = document.getElementById("notice");
-const modal = document.getElementById("playerModal");
-const modalTitle = document.getElementById("modalTitle");
-const form = document.getElementById("playerForm");
-const nameInput = document.getElementById("playerName");
-const skillInput = document.getElementById("playerSkill");
-const womanInput = document.getElementById("playerWoman");
-const setterInput = document.getElementById("playerSetter");
-const submitBtn = document.getElementById("submitBtn");
-const deletePlayerBtn = document.getElementById("deletePlayerBtn");
+function init(){
+    loadData();
+    renderPlayers();
+    setupEventListeners();
+    initTheme();
+}
 
-function loadRoster(){
-    try{
-        const current = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if(Array.isArray(current)){
-            return current.map(normalizePlayer);
-        }
-
-        const old = JSON.parse(localStorage.getItem(OLD_STORAGE_KEY));
-        if(Array.isArray(old)){
-            const migrated = old.map(normalizePlayer);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
-            localStorage.setItem(SELECTED_KEY, JSON.stringify(migrated.map(player => player.id)));
-            return migrated;
-        }
-    }catch(error){
-        return [];
+function loadData(){
+    try {
+        players = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        selectedIds = JSON.parse(localStorage.getItem(SELECTED_KEY)) || [];
+    } catch (e) {
+        players = [];
+        selectedIds = [];
     }
-    return DEFAULT_PLAYERS.map(item => ({ id: uid(), name: item[0], skill: item[1], woman: item[2], setter: item[3] }));
-}
 
-function normalizePlayer(player){
-    return {
-        id: player.id || uid(),
-        name: player.name || "",
-        skill: normalizeSkill(player.skill),
-        woman: Boolean(player.woman || player.gender === "F"),
-        setter: Boolean(player.setter)
-    };
-}
-
-function loadSelectedIds(){
-    try{
-        const stored = JSON.parse(localStorage.getItem(SELECTED_KEY));
-        if(Array.isArray(stored)){
-            return stored.filter(id => roster.some(player => player.id === id));
-        }
-    }catch(error){
-        return [];
-    }
-    return roster.map(player => player.id);
-}
-
-function saveRoster(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(roster));
-    localStorage.setItem(SELECTED_KEY, JSON.stringify(selectedIds));
-}
-
-function loadSavedDraw(){
-    try{
-        const saved = JSON.parse(localStorage.getItem(DRAW_KEY));
-        if(!saved || !Array.isArray(saved.teams)){
-            return null;
-        }
-        if(Date.now() - saved.savedAt > DRAW_TTL){
-            localStorage.removeItem(DRAW_KEY);
-            return null;
-        }
-        return saved.teams;
-    }catch(error){
-        return null;
+    if (players.length === 0) {
+        players = createDefaultPlayers();
+        saveData();
     }
 }
 
-function saveDraw(){
-    if(lastDraw){
-        localStorage.setItem(DRAW_KEY, JSON.stringify({
-            savedAt: Date.now(),
-            teams: lastDraw
-        }));
-    }else{
-        localStorage.removeItem(DRAW_KEY);
-    }
+function createDefaultPlayers(){
+    return [
+        { id: uid(), name: "Ana Silva", skill: 3, positionMain: "ponteiro", positionSecond: "central", experience: "intermediario", height: 175, availability: "ativo", notes: "" },
+        { id: uid(), name: "Bruno Santos", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 180, availability: "ativo", notes: "" },
+        { id: uid(), name: "Carlos Mendes", skill: 5, positionMain: "central", positionSecond: "oposto", experience: "competitivo", height: 195, availability: "ativo", notes: "" },
+        { id: uid(), name: "Diana Costa", skill: 2, positionMain: "libero", positionSecond: "", experience: "recreativo", height: 165, availability: "ativo", notes: "" },
+        { id: uid(), name: "Enzo Martins", skill: 4, positionMain: "oposto", positionSecond: "ponteiro", experience: "avancado", height: 185, availability: "ativo", notes: "" },
+        { id: uid(), name: "Fernanda Lima", skill: 3, positionMain: "ponteiro", positionSecond: "levantador", experience: "intermediario", height: 172, availability: "ativo", notes: "" },
+        { id: uid(), name: "Gustavo Rocha", skill: 2, positionMain: "ponteiro", positionSecond: "central", experience: "recreativo", height: 182, availability: "ativo", notes: "" },
+        { id: uid(), name: "Helena Reis", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 168, availability: "ativo", notes: "" },
+        { id: uid(), name: "Igor Cardoso", skill: 5, positionMain: "oposto", positionSecond: "ponteiro", experience: "competitivo", height: 188, availability: "ativo", notes: "" },
+        { id: uid(), name: "Julia Souza", skill: 3, positionMain: "central", positionSecond: "libero", experience: "intermediario", height: 180, availability: "ativo", notes: "" },
+    ];
 }
 
 function uid(){
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-function selectedPlayers(){
-    return roster.filter(player => selectedIds.includes(player.id));
+function saveData(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+    localStorage.setItem(SELECTED_KEY, JSON.stringify(selectedIds));
 }
 
-function shuffle(list){
-    const copy = list.slice();
-    for(let index = copy.length - 1; index > 0; index--){
-        const randomIndex = Math.floor(Math.random() * (index + 1));
-        [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
-    }
-    return copy;
-}
+function renderPlayers(){
+    const grid = document.getElementById("playerGrid");
+    const sorted = players.slice().sort((a, b) => a.name.localeCompare(b.name));
 
-function normalizeSkill(value){
-    const skill = Number(value);
-    if(Number.isNaN(skill)){
-        return 0;
-    }
-    return Math.max(0, Math.min(5, Math.round(skill)));
-}
-
-function getSelectedTeamCount(){
-    return "auto";
-}
-
-function resolveTeamCount(total){
-    const selected = getSelectedTeamCount();
-    if(selected !== "auto"){
-        return Number(selected);
-    }
-    if(total <= 10){
-        return 2;
-    }
-    if(total <= 18){
-        return 3;
-    }
-    return 4;
-}
-
-function targetCounts(total, teamCount){
-    const counts = Array.from({ length: teamCount }, () => Math.floor(total / teamCount));
-    let remainder = total % teamCount;
-    let index = 0;
-    while(remainder > 0){
-        counts[index]++;
-        remainder--;
-        index++;
-    }
-    return shuffle(counts);
-}
-
-function makeEmptyTeams(teamCount, sizes, womenTargets, setterTargets){
-    return Array.from({ length: teamCount }, (_, index) => ({
-        name: "Time " + (index + 1),
-        players: [],
-        total: 0,
-        women: 0,
-        setters: 0,
-        targetSize: sizes[index],
-        targetWomen: womenTargets[index],
-        targetSetters: setterTargets[index]
-    }));
-}
-
-function sortBySkillRandomized(list){
-    return shuffle(list).sort((a, b) => b.skill - a.skill);
-}
-
-function pickTeamForPlayer(teams, player, options){
-    const strict = teams.filter(team => {
-        if(team.players.length >= team.targetSize || team.players.length >= MAX_PER_TEAM){
-            return false;
-        }
-        if(options.preferSetterSlot && player.setter && team.setters >= team.targetSetters){
-            return false;
-        }
-        if(options.preferWomenSlot && player.woman && team.women >= team.targetWomen){
-            return false;
-        }
-        return true;
-    });
-
-    const open = teams.filter(team => team.players.length < team.targetSize && team.players.length < MAX_PER_TEAM);
-    const pool = strict.length ? strict : open;
-    if(pool.length === 0){
-        return null;
-    }
-
-    return pool.sort((a, b) => {
-        const setterNeedA = Math.max(0, a.targetSetters - a.setters);
-        const setterNeedB = Math.max(0, b.targetSetters - b.setters);
-        const womenNeedA = Math.max(0, a.targetWomen - a.women);
-        const womenNeedB = Math.max(0, b.targetWomen - b.women);
-        const projectedA = a.total + player.skill;
-        const projectedB = b.total + player.skill;
-        const fillA = a.players.length / Math.max(1, a.targetSize);
-        const fillB = b.players.length / Math.max(1, b.targetSize);
-        const roleBonusA = (player.setter ? setterNeedA * 1.6 : 0) + (player.woman ? womenNeedA * 0.8 : 0);
-        const roleBonusB = (player.setter ? setterNeedB * 1.6 : 0) + (player.woman ? womenNeedB * 0.8 : 0);
-        return (projectedA + fillA * 0.35 - roleBonusA) - (projectedB + fillB * 0.35 - roleBonusB);
-    })[0];
-}
-
-function addToTeam(team, player){
-    team.players.push(player);
-    team.total += player.skill;
-    if(player.woman){
-        team.women++;
-    }
-    if(player.setter){
-        team.setters++;
-    }
-}
-
-function removeFromTeam(team, playerId){
-    const index = team.players.findIndex(player => player.id === playerId);
-    if(index === -1){
-        return null;
-    }
-    const player = team.players.splice(index, 1)[0];
-    recalcTeam(team);
-    return player;
-}
-
-function recalcTeam(team){
-    team.total = team.players.reduce((sum, player) => sum + player.skill, 0);
-    team.women = team.players.filter(player => player.woman).length;
-    team.setters = team.players.filter(player => player.setter).length;
-}
-
-function recalcTeams(teams){
-    teams.forEach(team => recalcTeam(team));
-}
-
-function buildDrawAttempt(teamCount, pool){
-    const sizes = targetCounts(pool.length, teamCount);
-    const womenTargets = targetCounts(pool.filter(player => player.woman).length, teamCount);
-    const setterTargets = targetCounts(pool.filter(player => player.setter).length, teamCount);
-    const teams = makeEmptyTeams(teamCount, sizes, womenTargets, setterTargets);
-
-    const setters = sortBySkillRandomized(pool.filter(player => player.setter));
-    const women = sortBySkillRandomized(pool.filter(player => player.woman && !player.setter));
-    const others = sortBySkillRandomized(pool.filter(player => !player.woman && !player.setter));
-
-    setters.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: true, preferWomenSlot: true });
-        if(team){
-            addToTeam(team, player);
-        }
-    });
-
-    women.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: false, preferWomenSlot: true });
-        if(team){
-            addToTeam(team, player);
-        }
-    });
-
-    others.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: false, preferWomenSlot: false });
-        if(team){
-            addToTeam(team, player);
-        }
-    });
-
-    teams.forEach(team => {
-        team.players.sort((a, b) => b.skill - a.skill || a.name.localeCompare(b.name));
-    });
-
-    return teams;
-}
-
-function buildDrawAttemptWithLocked(teamCount, pool, lockedByTeam){
-    const unlockedPool = pool.filter(p => lockedPlayers[p.id] === undefined);
-    const sizes = targetCounts(pool.length, teamCount);
-    const womenTargets = targetCounts(pool.filter(p => p.woman).length, teamCount);
-    const setterTargets = targetCounts(pool.filter(p => p.setter).length, teamCount);
-    const teams = makeEmptyTeams(teamCount, sizes, womenTargets, setterTargets);
-
-    Object.entries(lockedByTeam).forEach(([ti, players]) => {
-        const idx = Number(ti);
-        if(idx < teamCount){
-            players.forEach(player => addToTeam(teams[idx], player));
-        }
-    });
-
-    const setters = sortBySkillRandomized(unlockedPool.filter(p => p.setter));
-    const women = sortBySkillRandomized(unlockedPool.filter(p => p.woman && !p.setter));
-    const others = sortBySkillRandomized(unlockedPool.filter(p => !p.woman && !p.setter));
-
-    setters.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: true, preferWomenSlot: true });
-        if(team) addToTeam(team, player);
-    });
-    women.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: false, preferWomenSlot: true });
-        if(team) addToTeam(team, player);
-    });
-    others.forEach(player => {
-        const team = pickTeamForPlayer(teams, player, { preferSetterSlot: false, preferWomenSlot: false });
-        if(team) addToTeam(team, player);
-    });
-
-    teams.forEach(team => {
-        team.players.sort((a, b) => b.skill - a.skill || a.name.localeCompare(b.name));
-    });
-
-    return teams;
-}
-
-function buildWaitingDrawAttempt(pool){
-    const waitingCount = pool.length - 12;
-    const shuffled = shuffle(pool);
-    const waiting = shuffled.slice(0, waitingCount);
-    const waitingIds = waiting.map(player => player.id);
-    const starters = pool.filter(player => !waitingIds.includes(player.id));
-    const teams = buildDrawAttempt(2, starters);
-    const waitingTeam = {
-        name: "Time 3",
-        waiting: true,
-        players: [],
-        total: 0,
-        women: 0,
-        setters: 0,
-        targetSize: MAX_PER_TEAM,
-        targetWomen: 0,
-        targetSetters: 0
-    };
-
-    waiting.forEach(player => addToTeam(waitingTeam, player));
-    waitingTeam.players.sort((a, b) => b.skill - a.skill || a.name.localeCompare(b.name));
-    teams.push(waitingTeam);
-    return teams;
-}
-
-function rateDraw(teams){
-    const activeTeams = teams.filter(team => !team.waiting);
-    const waitingTeam = teams.find(team => team.waiting);
-    const totals = activeTeams.map(team => team.total);
-    const sizes = activeTeams.map(team => team.players.length);
-    const womenSpread = activeTeams.map(team => Math.abs(team.women - team.targetWomen)).reduce((sum, value) => sum + value, 0);
-    const setterSpread = activeTeams.map(team => Math.abs(team.setters - team.targetSetters)).reduce((sum, value) => sum + value, 0);
-    const teamsWithoutSetter = activeTeams.filter(team => team.targetSetters > 0 && team.setters === 0).length;
-    const sizeSpread = Math.max(...sizes) - Math.min(...sizes);
-    const scoreSpread = Math.max(...totals) - Math.min(...totals);
-    let waitingPenalty = 0;
-
-    if(waitingTeam){
-        const allPlayers = teams.flatMap(team => team.players);
-        const average = allPlayers.reduce((sum, player) => sum + player.skill, 0) / allPlayers.length;
-        const waitingAverage = waitingTeam.players.reduce((sum, player) => sum + player.skill, 0) / waitingTeam.players.length;
-        waitingPenalty = Math.abs(waitingAverage - average) * 8;
-    }
-
-    return scoreSpread * 10 + sizeSpread * 3 + womenSpread * 60 + setterSpread * 90 + teamsWithoutSetter * 140 + waitingPenalty;
-}
-
-function drawTeams(){
-    const pool = selectedPlayers();
-    const teamCount = resolveTeamCount(pool.length);
-    const capacity = teamCount * MAX_PER_TEAM;
-
-    if(pool.length < teamCount){
-        showNotice("Selecione pelo menos " + teamCount + " jogadores para sortear " + teamCount + " times.");
-        return;
-    }
-
-    if(pool.length > capacity){
-        showNotice("O máximo suportado é " + capacity + " jogadores. Remova alguns ou atualize a lista.");
-        return;
-    }
-
-    const lockedByTeam = {};
-    Object.entries(lockedPlayers).forEach(([playerId, ti]) => {
-        const player = pool.find(p => p.id === playerId);
-        if(player && ti < teamCount){
-            if(!lockedByTeam[ti]) lockedByTeam[ti] = [];
-            lockedByTeam[ti].push(player);
-        }
-    });
-    const hasLocked = Object.keys(lockedByTeam).length > 0;
-
-    let best = null;
-    let bestScore = Infinity;
-    for(let attempt = 0; attempt < 900; attempt++){
-        const teams = hasLocked
-            ? buildDrawAttemptWithLocked(teamCount, pool, lockedByTeam)
-            : buildDrawAttempt(teamCount, pool);
-        const score = rateDraw(teams);
-        if(score < bestScore){
-            best = teams;
-            bestScore = score;
-        }
-    }
-
-    lastDraw = best;
-    swapSuggestion = null;
-    renderTeams(best);
-    renderSummary(best, bestScore);
-
-    const activeTeamCount = best.filter(team => !team.waiting).length;
-    const setters = pool.filter(player => player.setter).length;
-    if(setters < activeTeamCount){
-        showNotice("Tem " + setters + " levantador(es) para " + activeTeamCount + " times. O app distribuiu o melhor possível.");
-    }else{
-        hideNotice();
-    }
-}
-
-function renderStars(value){
-    return Array.from({ length: 5 }, (_, index) => `
-        <span class="star ${index < value ? "active" : ""}" aria-hidden="true">★</span>
-    `).join("");
-}
-
-function renderRoster(){
-    const sorted = roster.slice().sort((a, b) => a.name.localeCompare(b.name));
-    playersGrid.innerHTML = sorted.map(player => {
+    grid.innerHTML = sorted.map(player => {
         const selected = selectedIds.includes(player.id);
-        const badges = (player.woman ? "<span class='badge woman'>M</span>" : "") +
-                       (player.setter ? "<span class='badge setter'>L</span>" : "");
+        const role = POSITIONS[player.positionMain] || player.positionMain;
         return `
-            <article class="touch-card ${selected ? "selected" : ""}"
-                     onclick="togglePlayer('${player.id}')"
-                     role="button"
-                     tabindex="0"
-                     aria-pressed="${selected}"
-                     aria-label="${escapeHtml(player.name)}">
-                <span class="touch-name">${escapeHtml(player.name)}</span>
-                <div class="card-footer">
-                    <div class="player-badges">${badges}</div>
-                    <button class="edit-dot-btn" type="button"
-                            onclick="event.stopPropagation();openEditModal('${player.id}')"
-                            aria-label="Editar">...</button>
+            <div class="player-card ${selected ? "selected" : ""}" onclick="togglePlayer('${player.id}')">
+                <div>
+                    <span class="player-name">${escapeHtml(player.name)}</span>
+                    <span class="player-role">${role}</span>
                 </div>
-            </article>
+                <button class="player-edit" type="button" onclick="event.stopPropagation();editPlayer('${player.id}')" title="Editar">···</button>
+            </div>
         `;
     }).join("") + `
-        <button class="touch-card add-card" type="button" onclick="openCreateModal()">+</button>
+        <button class="player-card add-card" type="button" onclick="createPlayer()">+</button>
     `;
+
+    updateStats();
 }
 
-function renderStats(){
-    const pool = selectedPlayers();
-    const total = pool.length;
-    const women = pool.filter(player => player.woman).length;
-    const setters = pool.filter(player => player.setter).length;
-    const teamCount = resolveTeamCount(total);
-    document.getElementById("statPlayers").textContent = total;
-    document.getElementById("statTeams").textContent = teamCount;
-
-    if(pool.length === 0){
-        selectedNames.textContent = "Nenhum jogador selecionado.";
-    }else{
-        selectedNames.textContent = pool.map(player => player.name).join(", ");
-    }
-}
-
-function renderTeams(teams){
-    result.innerHTML = `
-        <div class="teams ${teams.length === 2 ? "two" : ""} ${teams.length === 4 ? "four" : ""}">
-            ${teams.map((team, teamIndex) => `
-                <article class="team" data-team-index="${teamIndex}" ondragover="handleTeamDragOver(event)" ondragleave="handleTeamDragLeave(event)" ondrop="handleTeamDrop(event, ${teamIndex})">
-                    <div class="team-head">
-                        <div class="team-title">
-                            <h3>${team.name}</h3>
-                            <span class="score">${team.waiting ? "Espera" : "OK"}</span>
-                        </div>
-                        <div class="team-meta">
-                            <span class="tag">${team.players.length}/${MAX_PER_TEAM}</span>
-                            <span class="tag woman">${team.women} mulher${team.women === 1 ? "" : "es"}</span>
-                            <span class="tag setter">${team.setters} levantador${team.setters === 1 ? "" : "es"}</span>
-                        </div>
-                    </div>
-                    <div class="team-list">
-                        ${team.players.map((player, index) => {
-                            const locked = lockedPlayers[player.id] !== undefined;
-                            const lockIcon = locked
-                                ? `<svg viewBox="0 0 12 14" width="10" height="12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="6" width="9" height="7.5" rx="1.5"/><path d="M3.5 6V3.5a2.5 2.5 0 0 1 5 0V6"/></svg>`
-                                : `<svg viewBox="0 0 12 14" width="10" height="12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="6" width="9" height="7.5" rx="1.5"/><path d="M8.5 5.5V3.5A2.5 2.5 0 0 0 3.5 3"/></svg>`;
-                            return `
-                            <div class="team-player ${isSuggestedSwap(player.id, teamIndex) ? "swap-suggest" : ""}" draggable="false" data-player-id="${player.id}" data-team-index="${teamIndex}" onpointerdown="startHoldDrag(event)" onpointerup="cancelHoldDrag()" onpointercancel="cancelHoldDrag()" ondragstart="handlePlayerDragStart(event)" ondragend="handlePlayerDragEnd(event)">
-                                <span class="order">${index + 1}</span>
-                                <strong>${escapeHtml(player.name)}</strong>
-                                ${isSuggestedSwap(player.id, teamIndex) ? "<span class='swap-label'>Sugestao</span>" : (player.setter ? "<span class='tag setter'>Levantador</span>" : "<span></span>")}
-                                <button class="lock-btn ${locked ? "locked" : ""}" type="button" onclick="event.stopPropagation();toggleLock('${player.id}',${teamIndex})" aria-label="${locked ? "Destrancar" : "Travar"} ${escapeHtml(player.name)}">${lockIcon}</button>
-                            </div>`;
-                        }).join("")}
-                    </div>
-                </article>
-            `).join("")}
-        </div>
-    `;
-}
-
-function renderSummary(teams, score = 0){
-    const quality = score <= 30 ? "Otimo" : score <= 100 ? "Bom" : score <= 250 ? "Regular" : "Ok";
-    summary.classList.add("show");
-    summary.innerHTML = `
-        <div class="summary-item">
-            <span>Equilibrio</span>
-            <strong>${quality}</strong>
-        </div>
-        <div class="summary-item">
-            <span>Mulheres por time</span>
-            <strong>${teams.map(team => team.women).join(" / ")}</strong>
-        </div>
-        <div class="summary-item">
-            <span>Total sorteado</span>
-            <strong>${selectedPlayers().length}</strong>
-        </div>
-        <button class="summary-item summary-copy" type="button" id="copyBtn">
-            <strong>Exportar</strong>
-        </button>
-    `;
-    document.getElementById("copyBtn").addEventListener("click", copyResult);
-}
-
-let lockNoticeTimer = null;
-
-function showLockNotice(message){
-    clearTimeout(lockNoticeTimer);
-    document.getElementById("lockNoticeText").textContent = message;
-    document.getElementById("lockNotice").classList.add("show");
-    lockNoticeTimer = setTimeout(hideLockNotice, 4000);
-}
-
-function hideLockNotice(){
-    clearTimeout(lockNoticeTimer);
-    document.getElementById("lockNotice").classList.remove("show");
-}
-
-function toggleLock(playerId, teamIndex){
-    if(lockedPlayers[playerId] !== undefined){
-        delete lockedPlayers[playerId];
-        renderTeams(lastDraw);
-        return;
-    }
-    const countInTeam = Object.values(lockedPlayers).filter(ti => ti === teamIndex).length;
-    if(countInTeam >= 2){
-        const teamName = lastDraw && lastDraw[teamIndex] ? lastDraw[teamIndex].name : "esse time";
-        showLockNotice("Máximo 2 por time — travar demais prejudica o equilíbrio do sorteio.");
-        return;
-    }
-    lockedPlayers[playerId] = teamIndex;
-    renderTeams(lastDraw);
-}
-
-function isSuggestedSwap(playerId, teamIndex){
-    return Boolean(
-        swapSuggestion &&
-        swapSuggestion.playerId === playerId &&
-        swapSuggestion.fromTeamIndex === teamIndex
-    );
-}
-
-function startHoldDrag(event){
-    if(!lastDraw){
-        return;
-    }
-    const item = event.currentTarget;
-    clearTimeout(holdTimer);
-    holdTimer = setTimeout(() => {
-        dragState = {
-            playerId: item.dataset.playerId,
-            fromTeamIndex: Number(item.dataset.teamIndex)
-        };
-        activeDragElement = item;
-        item.draggable = true;
-        item.classList.add("drag-ready");
-        window.addEventListener("pointermove", handleTouchDragMove, { passive: false });
-        window.addEventListener("pointerup", finishTouchDrag, { once: true });
-        window.addEventListener("pointercancel", finishTouchDrag, { once: true });
-        showNotice("Agora arraste " + item.querySelector("strong").textContent + " para outro time.");
-    }, 280);
-}
-
-function cancelHoldDrag(){
-    clearTimeout(holdTimer);
-}
-
-function handleTouchDragMove(event){
-    if(!dragState){
-        return;
-    }
-    event.preventDefault();
-    const element = document.elementFromPoint(event.clientX, event.clientY);
-    const team = element ? element.closest(".team") : null;
-    document.querySelectorAll(".team.drop-target").forEach(item => item.classList.remove("drop-target"));
-
-    if(team){
-        team.classList.add("drop-target");
-        currentDropTeamIndex = Number(team.dataset.teamIndex);
-    }else{
-        currentDropTeamIndex = null;
-    }
-}
-
-function finishTouchDrag(){
-    clearTimeout(holdTimer);
-    window.removeEventListener("pointermove", handleTouchDragMove);
-    document.querySelectorAll(".team.drop-target").forEach(team => team.classList.remove("drop-target"));
-
-    if(dragState && currentDropTeamIndex !== null){
-        movePlayerBetweenTeams(dragState.playerId, dragState.fromTeamIndex, currentDropTeamIndex);
-    }
-
-    if(activeDragElement){
-        activeDragElement.draggable = false;
-        activeDragElement.classList.remove("drag-ready");
-    }
-
-    dragState = null;
-    activeDragElement = null;
-    currentDropTeamIndex = null;
-}
-
-function handlePlayerDragStart(event){
-    const item = event.currentTarget;
-    dragState = {
-        playerId: item.dataset.playerId,
-        fromTeamIndex: Number(item.dataset.teamIndex)
-    };
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", dragState.playerId);
-}
-
-function handlePlayerDragEnd(event){
-    event.currentTarget.draggable = false;
-    event.currentTarget.classList.remove("drag-ready");
-    document.querySelectorAll(".team.drop-target").forEach(team => team.classList.remove("drop-target"));
-    clearTimeout(holdTimer);
-    dragState = null;
-}
-
-function handleTeamDragOver(event){
-    if(!dragState){
-        return;
-    }
-    event.preventDefault();
-    event.currentTarget.classList.add("drop-target");
-}
-
-function handleTeamDragLeave(event){
-    event.currentTarget.classList.remove("drop-target");
-}
-
-function handleTeamDrop(event, toTeamIndex){
-    event.preventDefault();
-    event.currentTarget.classList.remove("drop-target");
-    if(!dragState){
-        return;
-    }
-    movePlayerBetweenTeams(dragState.playerId, dragState.fromTeamIndex, toTeamIndex);
-    dragState = null;
-}
-
-function movePlayerBetweenTeams(playerId, fromTeamIndex, toTeamIndex){
-    if(fromTeamIndex === toTeamIndex || !lastDraw[fromTeamIndex] || !lastDraw[toTeamIndex]){
-        return;
-    }
-
-    const fromTeam = lastDraw[fromTeamIndex];
-    const toTeam = lastDraw[toTeamIndex];
-    if(toTeam.players.length >= MAX_PER_TEAM + 1){
-        showNotice(toTeam.name + " ja esta com gente demais. Tire alguem dele antes ou escolha outro time.");
-        return;
-    }
-
-    const movedPlayer = removeFromTeam(fromTeam, playerId);
-    if(!movedPlayer){
-        return;
-    }
-
-    delete lockedPlayers[playerId];
-    addToTeam(toTeam, movedPlayer);
-    recalcTeams(lastDraw);
-    sortTeamPlayers(fromTeam);
-    sortTeamPlayers(toTeam);
-    swapSuggestion = findSwapSuggestion(toTeamIndex, fromTeamIndex, movedPlayer.id);
-    renderTeams(lastDraw);
-    renderSummary(lastDraw);
-
-    if(swapSuggestion){
-        const suggested = lastDraw[swapSuggestion.fromTeamIndex].players.find(player => player.id === swapSuggestion.playerId);
-        showNotice(movedPlayer.name + " foi para " + toTeam.name + ". Sugestao: " + suggested.name + " pode ir para " + fromTeam.name + ".");
-    }else{
-        showNotice(movedPlayer.name + " foi para " + toTeam.name + ".");
-    }
-}
-
-function sortTeamPlayers(team){
-    team.players.sort((a, b) => b.skill - a.skill || a.name.localeCompare(b.name));
-}
-
-function findSwapSuggestion(candidateTeamIndex, targetTeamIndex, movedPlayerId){
-    const candidateTeam = lastDraw[candidateTeamIndex];
-    const targetTeam = lastDraw[targetTeamIndex];
-    const candidates = candidateTeam.players.filter(player => player.id !== movedPlayerId);
-    if(candidates.length === 0 || targetTeam.players.length >= MAX_PER_TEAM){
-        return null;
-    }
-
-    let best = null;
-    let bestScore = Infinity;
-    candidates.forEach(candidate => {
-        const simulated = cloneTeams(lastDraw);
-        const simCandidateTeam = simulated[candidateTeamIndex];
-        const simTargetTeam = simulated[targetTeamIndex];
-        const moved = removeFromTeam(simCandidateTeam, candidate.id);
-        addToTeam(simTargetTeam, moved);
-        const score = rateDraw(simulated) + roleMismatchPenalty(candidate, targetTeam);
-        if(score < bestScore){
-            bestScore = score;
-            best = candidate;
-        }
-    });
-
-    return best ? {
-        playerId: best.id,
-        fromTeamIndex: candidateTeamIndex,
-        toTeamIndex: targetTeamIndex
-    } : null;
-}
-
-function roleMismatchPenalty(player, targetTeam){
-    let penalty = 0;
-    if(player.setter && targetTeam.setters === 0){
-        penalty -= 20;
-    }
-    if(player.woman && targetTeam.women === 0){
-        penalty -= 10;
-    }
-    return penalty;
-}
-
-function cloneTeams(teams){
-    return teams.map(team => ({
-        ...team,
-        players: team.players.slice()
-    }));
+function updateStats(){
+    document.getElementById("statPlayers").textContent = selectedIds.length;
 }
 
 function togglePlayer(id){
-    if(selectedIds.includes(id)){
-        selectedIds = selectedIds.filter(selectedId => selectedId !== id);
-        clearDraw();
-        updateAll();
-        hideNotice();
-    }else{
-        if(lastDraw){
-            const player = roster.find(item => item.id === id);
-            if(assignLatePlayer(player)){
-                selectedIds.push(id);
-                updateAll();
-                return;
-            }
-        }
+    if (selectedIds.includes(id)) {
+        selectedIds = selectedIds.filter(s => s !== id);
+    } else {
         selectedIds.push(id);
-        clearDraw();
-        updateAll();
     }
+    saveData();
+    renderPlayers();
 }
 
-function assignLatePlayer(player){
-    if(!player){
-        return false;
-    }
-
-    let waitingTeam = lastDraw.find(team => team.waiting || team.name === "Time 3");
-    if(!waitingTeam){
-        if(lastDraw.length !== 2){
-            return false;
-        }
-        waitingTeam = {
-            name: "Time 3",
-            waiting: true,
-            players: [],
-            total: 0,
-            women: 0,
-            setters: 0,
-            targetSize: MAX_PER_TEAM,
-            targetWomen: 0,
-            targetSetters: 0
-        };
-        lastDraw.push(waitingTeam);
-    }
-
-    if(waitingTeam.players.length >= MAX_PER_TEAM){
-        showNotice("O Time 3 ja esta completo com 6 pessoas. Para colocar mais alguem, refaca o sorteio.");
-        return false;
-    }
-
-    waitingTeam.waiting = true;
-    addToTeam(waitingTeam, player);
-    waitingTeam.players.sort((a, b) => b.skill - a.skill || a.name.localeCompare(b.name));
-    renderTeams(lastDraw);
-    renderSummary(lastDraw);
-    showNotice(player.name + " entrou no Time 3 como atrasado.");
-    return true;
-}
-
-function openCreateModal(){
+function createPlayer(){
     editingId = null;
-    modalTitle.textContent = "Adicionar jogador";
-    submitBtn.textContent = "Salvar";
-    deletePlayerBtn.style.display = "none";
-    form.reset();
-    updateStarPreview(3);
-    womanInput.checked = false;
-    setterInput.checked = false;
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-    nameInput.focus();
+    document.getElementById("modalTitle").textContent = "Novo jogador";
+    document.getElementById("deleteBtn").style.display = "none";
+    document.getElementById("playerForm").reset();
+    updateSkillRating(3);
+    document.getElementById("playerModal").classList.add("show");
+    document.getElementById("playerName").focus();
 }
 
-function openEditModal(id){
-    const player = roster.find(item => item.id === id);
-    if(!player){
-        return;
-    }
+function editPlayer(id){
     editingId = id;
-    modalTitle.textContent = "Editar jogador";
-    submitBtn.textContent = "Salvar";
-    deletePlayerBtn.style.display = "flex";
-    nameInput.value = player.name;
-    updateStarPreview(player.skill);
-    womanInput.checked = player.woman;
-    setterInput.checked = player.setter;
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-    nameInput.focus();
+    const player = players.find(p => p.id === id);
+    if (!player) return;
+
+    document.getElementById("modalTitle").textContent = "Editar jogador";
+    document.getElementById("deleteBtn").style.display = "flex";
+
+    document.getElementById("playerName").value = player.name;
+    document.getElementById("positionMain").value = player.positionMain;
+    document.getElementById("positionSecond").value = player.positionSecond || "";
+    document.getElementById("experience").value = player.experience;
+    document.getElementById("height").value = player.height || "";
+    document.getElementById("availability").value = player.availability || "ativo";
+    document.getElementById("notes").value = player.notes || "";
+    updateSkillRating(player.skill);
+
+    document.getElementById("playerModal").classList.add("show");
 }
 
 function closeModal(){
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
+    document.getElementById("playerModal").classList.remove("show");
     editingId = null;
-    form.reset();
 }
 
-function removePlayer(id){
-    roster = roster.filter(player => player.id !== id);
-    selectedIds = selectedIds.filter(selectedId => selectedId !== id);
-    clearDraw();
-    updateAll();
+function setupEventListeners(){
+    document.getElementById("playerForm").addEventListener("submit", savePlayer);
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+    document.getElementById("cancelBtn").addEventListener("click", closeModal);
+    document.getElementById("deleteBtn").addEventListener("click", deletePlayer);
+    document.getElementById("configBtn").addEventListener("click", () => {
+        if (selectedIds.length === 0) {
+            alert("Selecione pelo menos um jogador!");
+            return;
+        }
+        document.getElementById("configModal").classList.add("show");
+    });
+    document.getElementById("closeConfigBtn").addEventListener("click", closeConfigModal);
+    document.getElementById("configForm").addEventListener("submit", handleDrawSubmit);
+    document.getElementById("mode").addEventListener("change", e => {
+        document.getElementById("mixedModeOptions").style.display = e.target.value === "misto" ? "grid" : "none";
+    });
+    document.getElementById("clearBtn").addEventListener("click", () => {
+        selectedIds = [];
+        saveData();
+        renderPlayers();
+    });
+    document.getElementById("playerModal").addEventListener("click", e => {
+        if (e.target === document.getElementById("playerModal")) closeModal();
+    });
+    document.getElementById("configModal").addEventListener("click", e => {
+        if (e.target === document.getElementById("configModal")) closeConfigModal();
+    });
+    renderSkillRating();
 }
 
-function clearDraw(){
-    lastDraw = null;
-    swapSuggestion = null;
-    summary.classList.remove("show");
+function closeConfigModal(){
+    document.getElementById("configModal").classList.remove("show");
 }
 
-function showNotice(message){
-    notice.textContent = message;
-    notice.classList.add("show");
+function handleDrawSubmit(e){
+    e.preventDefault();
+    const formation = document.getElementById("formationType").value;
+    const mode = document.getElementById("mode").value;
+    const womenPercentage = mode === "misto" ? parseInt(document.getElementById("womenPercentage").value) : 0;
+
+    drawTeams(formation, mode, womenPercentage);
+    closeConfigModal();
 }
 
-function hideNotice(){
-    notice.classList.remove("show");
-    notice.textContent = "";
+function renderSkillRating(){
+    const container = document.getElementById("skillRating");
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        html += `<button type="button" class="star-btn" data-value="${i}">★</button>`;
+    }
+    container.innerHTML = html;
+    container.querySelectorAll(".star-btn").forEach(btn => {
+        btn.addEventListener("click", () => updateSkillRating(parseInt(btn.dataset.value)));
+    });
 }
 
-function updateAll(){
-    saveRoster();
-    renderRoster();
-    renderStats();
+function updateSkillRating(value){
+    document.querySelectorAll("#skillRating .star-btn").forEach(btn => {
+        if (parseInt(btn.dataset.value) <= value) {
+            btn.classList.add("active");
+        } else {
+            btn.classList.remove("active");
+        }
+    });
+    document.getElementById("playerForm").dataset.skill = value;
 }
 
-function copyResult(){
-    if(!lastDraw){
+function savePlayer(e){
+    e.preventDefault();
+
+    const name = document.getElementById("playerName").value.trim();
+    const skill = parseInt(document.getElementById("playerForm").dataset.skill) || 3;
+    const positionMain = document.getElementById("positionMain").value;
+    const positionSecond = document.getElementById("positionSecond").value;
+    const experience = document.getElementById("experience").value;
+    const height = document.getElementById("height").value ? parseInt(document.getElementById("height").value) : 0;
+    const availability = document.getElementById("availability").value;
+    const notes = document.getElementById("notes").value.trim();
+
+    if (!name || !positionMain || !experience) {
+        alert("Preencha todos os campos obrigatórios!");
         return;
     }
-    const text = lastDraw.map(team => {
-        const list = team.players.map(player => "- " + player.name + (player.setter ? " (levantador)" : "")).join("\n");
-        return team.name + "\n" + list;
-    }).join("\n\n");
 
-    navigator.clipboard.writeText(text).then(() => {
-        const btn = document.getElementById("copyBtn");
-        if(btn) btn.querySelector("strong").textContent = "Copiado âœ“";
-        setTimeout(() => {
-            const btn = document.getElementById("copyBtn");
-            if(btn) btn.querySelector("strong").textContent = "Exportar";
-        }, 1500);
+    if (editingId) {
+        const player = players.find(p => p.id === editingId);
+        if (player) {
+            player.name = name;
+            player.skill = skill;
+            player.positionMain = positionMain;
+            player.positionSecond = positionSecond;
+            player.experience = experience;
+            player.height = height;
+            player.availability = availability;
+            player.notes = notes;
+        }
+    } else {
+        players.push({
+            id: uid(),
+            name,
+            skill,
+            positionMain,
+            positionSecond,
+            experience,
+            height,
+            availability,
+            notes
+        });
+        selectedIds.push(players[players.length - 1].id);
+    }
+
+    saveData();
+    renderPlayers();
+    closeModal();
+}
+
+function deletePlayer(){
+    if (!editingId) return;
+    players = players.filter(p => p.id !== editingId);
+    selectedIds = selectedIds.filter(id => id !== editingId);
+    saveData();
+    renderPlayers();
+    closeModal();
+}
+
+function drawTeams(formation, mode, womenPercentage){
+    if (selectedIds.length === 0) {
+        alert("Selecione pelo menos um jogador!");
+        return;
+    }
+
+    const pool = players.filter(p => selectedIds.includes(p.id));
+    const config = FORMATIONS[formation];
+
+    let attempts = 500;
+    let bestTeams = null;
+    let bestScore = Infinity;
+    let bestConfidence = 0;
+
+    for (let i = 0; i < attempts; i++) {
+        const { teams, score, confidence } = buildTeamsAttempt(pool, formation, mode, womenPercentage);
+        if (score < bestScore) {
+            bestScore = score;
+            bestTeams = teams;
+            bestConfidence = confidence;
+        }
+    }
+
+    lastDraw = { teams: bestTeams, score: bestScore, confidence: bestConfidence };
+    renderTeams(bestTeams, bestConfidence, formation, mode);
+    document.getElementById("resultPanel").style.display = "block";
+}
+
+function buildTeamsAttempt(pool, formation, mode, womenPercentage){
+    let teams = [];
+    const config = FORMATIONS[formation];
+
+    if (formation === "areia") {
+        teams = [
+            { name: "Time 1", players: [] },
+            { name: "Time 2", players: [] }
+        ];
+    } else if (formation === "quarteto") {
+        teams = [
+            { name: "Time 1", players: [] },
+            { name: "Time 2", players: [] }
+        ];
+    } else {
+        const teamCount = formation === "livre" ? getTeamCount(pool.length) : 2;
+        teams = Array.from({ length: teamCount }, (_, i) => ({
+            name: `Time ${i + 1}`,
+            players: []
+        }));
+    }
+
+    // Shuffle pool
+    const shuffled = shuffle(pool);
+
+    // Sort by skill descending
+    shuffled.sort((a, b) => b.skill - a.skill);
+
+    // Distribute
+    const teamsPerPlayer = teams.length;
+    shuffled.forEach((player, idx) => {
+        const teamIdx = idx % teamsPerPlayer;
+        teams[teamIdx].players.push(player);
     });
+
+    // Calculate metrics
+    const score = calculateScore(teams, formation, mode);
+    const confidence = calculateConfidence(teams, formation, mode);
+
+    return { teams, score, confidence };
+}
+
+function calculateScore(teams, formation, mode){
+    let score = 0;
+
+    // Skill balance
+    const skills = teams.map(t => t.players.reduce((s, p) => s + p.skill, 0));
+    const avgSkill = skills.reduce((a, b) => a + b, 0) / skills.length;
+    const skillVariance = skills.reduce((sum, s) => sum + Math.abs(s - avgSkill), 0);
+    score += skillVariance * 10;
+
+    // Size balance
+    const sizes = teams.map(t => t.players.length);
+    const maxSize = Math.max(...sizes);
+    const minSize = Math.min(...sizes);
+    score += (maxSize - minSize) * 20;
+
+    // Experience balance (for training mode)
+    if (mode === "treino") {
+        const experiences = teams.map(t => {
+            const avgExp = t.players.reduce((sum, p) => p.skill, 0) / Math.max(1, t.players.length);
+            return avgExp;
+        });
+        const avgExp = experiences.reduce((a, b) => a + b, 0) / experiences.length;
+        const expVariance = experiences.reduce((sum, e) => sum + Math.abs(e - avgExp), 0);
+        score += expVariance * 8;
+    }
+
+    // Position balance (for fixed formations)
+    if (formation !== "livre" && formation !== "areia" && formation !== "quarteto") {
+        const required = FORMATIONS[formation].required;
+        teams.forEach(team => {
+            Object.keys(required).forEach(pos => {
+                const count = team.players.filter(p => p.positionMain === pos).length;
+                const needed = required[pos];
+                if (count < needed) {
+                    score += (needed - count) * 50;
+                }
+            });
+        });
+    }
+
+    return Math.round(score);
+}
+
+function calculateConfidence(teams, formation, mode){
+    let confidence = 100;
+
+    // Check skill balance
+    const skills = teams.map(t => t.players.reduce((s, p) => s + p.skill, 0));
+    const avgSkill = skills.reduce((a, b) => a + b, 0) / skills.length;
+    const skillDiff = Math.max(...skills) - Math.min(...skills);
+    if (skillDiff > avgSkill * 0.3) confidence -= 10;
+    if (skillDiff > avgSkill * 0.5) confidence -= 15;
+
+    // Check formation requirements
+    if (formation !== "livre" && formation !== "areia" && formation !== "quarteto") {
+        const required = FORMATIONS[formation].required;
+        const totalMissing = teams.reduce((sum, team) => {
+            return sum + Object.keys(required).reduce((teamSum, pos) => {
+                const count = team.players.filter(p => p.positionMain === pos).length;
+                const needed = required[pos];
+                return teamSum + Math.max(0, needed - count);
+            }, 0);
+        }, 0);
+
+        if (totalMissing > 0) confidence -= totalMissing * 5;
+    }
+
+    return Math.max(0, confidence);
+}
+
+function shuffle(arr){
+    const result = arr.slice();
+    for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+}
+
+function getTeamCount(playerCount){
+    if (playerCount <= 10) return 2;
+    if (playerCount <= 18) return 3;
+    return 4;
+}
+
+function renderTeams(teams, confidence, formation, mode){
+    const result = document.getElementById("result");
+    const confidenceText = getConfidenceLabel(confidence);
+    document.getElementById("confidenceHint").textContent = `Índice de confiança: ${confidenceText} (${confidence}%)`;
+
+    result.innerHTML = `
+        <div class="teams-grid">
+            ${teams.map(team => {
+                const strength = team.players.reduce((s, p) => s + p.skill, 0);
+                const positionCounts = {};
+                team.players.forEach(p => {
+                    positionCounts[p.positionMain] = (positionCounts[p.positionMain] || 0) + 1;
+                });
+                const positions = Object.entries(positionCounts).map(([pos, count]) => `${POSITIONS[pos]}:${count}`).join(" | ");
+
+                return `
+                    <div class="team">
+                        <div class="team-header">
+                            <div class="team-title">${team.name}</div>
+                            <div class="team-stats">
+                                <span class="stat-badge">${team.players.length}</span>
+                                <span class="stat-badge">Força: ${strength}</span>
+                            </div>
+                        </div>
+                        <div style="padding:8px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--line);">${positions}</div>
+                        <div class="team-body">
+                            ${team.players.map((player, idx) => `
+                                <div class="team-player">
+                                    <div class="player-order">${idx + 1}</div>
+                                    <strong>${escapeHtml(player.name)}</strong>
+                                    <span class="player-role-badge">${POSITIONS[player.positionMain] || player.positionMain}</span>
+                                </div>
+                            `).join("")}
+                        </div>
+                    </div>
+                `;
+            }).join("")}
+        </div>
+    `;
+}
+
+function getConfidenceLabel(confidence){
+    if (confidence >= 90) return "Excelente";
+    if (confidence >= 80) return "Bom";
+    if (confidence >= 70) return "Regular";
+    return "Aceitável";
 }
 
 function escapeHtml(text){
@@ -1800,98 +1256,15 @@ function escapeHtml(text){
     return div.innerHTML;
 }
 
-function updateStarPreview(value){
-    const starButtons = document.querySelectorAll("#ratingStars .star-btn");
-    starButtons.forEach(button => {
-        button.classList.toggle("active", Number(button.dataset.value) <= value);
-        button.setAttribute("aria-checked", Number(button.dataset.value) === value ? "true" : "false");
-    });
-    skillInput.value = value;
-}
-
-function setupStarRating(){
-    document.querySelectorAll("#ratingStars .star-btn").forEach(button => {
-        button.addEventListener("click", () => updateStarPreview(Number(button.dataset.value)));
-    });
-}
-
-function applyTheme(theme){
-    document.documentElement.dataset.theme = theme;
-}
-
 function initTheme(){
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    applyTheme(prefersDark.matches ? "dark" : "light");
-    prefersDark.addEventListener("change", e => applyTheme(e.matches ? "dark" : "light"));
+    document.documentElement.dataset.theme = prefersDark.matches ? "dark" : "light";
+    prefersDark.addEventListener("change", e => {
+        document.documentElement.dataset.theme = e.matches ? "dark" : "light";
+    });
 }
 
-
-form.addEventListener("submit", event => {
-    event.preventDefault();
-    const name = nameInput.value.trim().replace(/\s+/g, " ");
-    const skill = normalizeSkill(skillInput.value);
-    const woman = womanInput.checked;
-    const setter = setterInput.checked;
-
-    if(!name){
-        return;
-    }
-
-    if(editingId){
-        roster = roster.map(player => player.id === editingId ? { ...player, name, skill, woman, setter } : player);
-    }else{
-        const player = { id: uid(), name, skill, woman, setter };
-        roster.push(player);
-        selectedIds.push(player.id);
-    }
-
-    clearDraw();
-    hideNotice();
-    updateAll();
-    closeModal();
-});
-
-
-
-document.getElementById("drawBtn").addEventListener("click", drawTeams);
-document.getElementById("closeModalBtn").addEventListener("click", closeModal);
-document.getElementById("cancelModalBtn").addEventListener("click", closeModal);
-deletePlayerBtn.addEventListener("click", () => {
-    if(!editingId){
-        return;
-    }
-    removePlayer(editingId);
-    closeModal();
-});
-modal.addEventListener("click", event => {
-    if(event.target === modal){
-        closeModal();
-    }
-});
-
-const _selNone = document.getElementById("selectNoneBtn");
-if(_selNone) _selNone.addEventListener("click", () => { selectedIds = []; clearDraw(); updateAll(); });
-
-
-setupStarRating();
-initTheme();
-
-
-playersGrid.addEventListener("contextmenu", event => {
-    event.preventDefault();
-});
-
-updateAll();
-
-// Code protection
-document.addEventListener("contextmenu", e => e.preventDefault());
-document.addEventListener("keydown", e => {
-    const blocked = e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && ["I","J","C","K"].includes(e.key.toUpperCase())) ||
-        (e.ctrlKey && ["u","s"].includes(e.key.toLowerCase()));
-    if(blocked){ e.preventDefault(); return false; }
-});
-document.addEventListener("copy", e => e.preventDefault());
+init();
 </script>
 </body>
 </html>
