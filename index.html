@@ -785,6 +785,14 @@ textarea{
             </div>
 
             <div class="form-group form-group-full">
+                <label for="playerGender">Gênero *</label>
+                <select id="playerGender" required>
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                </select>
+            </div>
+
+            <div class="form-group form-group-full">
                 <label>Nota Técnica (0-5) *</label>
                 <div class="star-rating" id="skillRating"></div>
             </div>
@@ -881,20 +889,8 @@ textarea{
                     <option value="pelada">Pelada (rápido e equilibrado)</option>
                     <option value="treino">Treino (misturar forças)</option>
                     <option value="campeonato">Campeonato (máxima competitividade)</option>
-                    <option value="misto">Misto (com % feminino)</option>
+                    <option value="feminino">Feminino (somente jogadoras ♀)</option>
                 </select>
-            </div>
-
-            <div class="form-row" id="mixedModeOptions" style="display:none;">
-                <div class="form-group">
-                    <label for="womenPercentage">% Feminino por time</label>
-                    <select id="womenPercentage">
-                        <option value="0">0%</option>
-                        <option value="25">25%</option>
-                        <option value="33">33%</option>
-                        <option value="50">50%</option>
-                    </select>
-                </div>
             </div>
 
             <div class="dialog-actions">
@@ -959,16 +955,16 @@ function loadData(){
 
 function createDefaultPlayers(){
     return [
-        { id: uid(), name: "Ana Silva", skill: 3, positionMain: "ponteiro", positionSecond: "central", experience: "intermediario", height: 175, availability: "ativo", notes: "" },
-        { id: uid(), name: "Bruno Santos", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 180, availability: "ativo", notes: "" },
-        { id: uid(), name: "Carlos Mendes", skill: 5, positionMain: "central", positionSecond: "oposto", experience: "competitivo", height: 195, availability: "ativo", notes: "" },
-        { id: uid(), name: "Diana Costa", skill: 2, positionMain: "libero", positionSecond: "", experience: "recreativo", height: 165, availability: "ativo", notes: "" },
-        { id: uid(), name: "Enzo Martins", skill: 4, positionMain: "oposto", positionSecond: "ponteiro", experience: "avancado", height: 185, availability: "ativo", notes: "" },
-        { id: uid(), name: "Fernanda Lima", skill: 3, positionMain: "ponteiro", positionSecond: "levantador", experience: "intermediario", height: 172, availability: "ativo", notes: "" },
-        { id: uid(), name: "Gustavo Rocha", skill: 2, positionMain: "ponteiro", positionSecond: "central", experience: "recreativo", height: 182, availability: "ativo", notes: "" },
-        { id: uid(), name: "Helena Reis", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 168, availability: "ativo", notes: "" },
-        { id: uid(), name: "Igor Cardoso", skill: 5, positionMain: "oposto", positionSecond: "ponteiro", experience: "competitivo", height: 188, availability: "ativo", notes: "" },
-        { id: uid(), name: "Julia Souza", skill: 3, positionMain: "central", positionSecond: "libero", experience: "intermediario", height: 180, availability: "ativo", notes: "" },
+        { id: uid(), name: "Ana Silva", gender: "feminino", skill: 3, positionMain: "ponteiro", positionSecond: "central", experience: "intermediario", height: 175, availability: "ativo", notes: "" },
+        { id: uid(), name: "Bruno Santos", gender: "masculino", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 180, availability: "ativo", notes: "" },
+        { id: uid(), name: "Carlos Mendes", gender: "masculino", skill: 5, positionMain: "central", positionSecond: "oposto", experience: "competitivo", height: 195, availability: "ativo", notes: "" },
+        { id: uid(), name: "Diana Costa", gender: "feminino", skill: 2, positionMain: "libero", positionSecond: "", experience: "recreativo", height: 165, availability: "ativo", notes: "" },
+        { id: uid(), name: "Enzo Martins", gender: "masculino", skill: 4, positionMain: "oposto", positionSecond: "ponteiro", experience: "avancado", height: 185, availability: "ativo", notes: "" },
+        { id: uid(), name: "Fernanda Lima", gender: "feminino", skill: 3, positionMain: "ponteiro", positionSecond: "levantador", experience: "intermediario", height: 172, availability: "ativo", notes: "" },
+        { id: uid(), name: "Gustavo Rocha", gender: "masculino", skill: 2, positionMain: "ponteiro", positionSecond: "central", experience: "recreativo", height: 182, availability: "ativo", notes: "" },
+        { id: uid(), name: "Helena Reis", gender: "feminino", skill: 4, positionMain: "levantador", positionSecond: "", experience: "avancado", height: 168, availability: "ativo", notes: "" },
+        { id: uid(), name: "Igor Cardoso", gender: "masculino", skill: 5, positionMain: "oposto", positionSecond: "ponteiro", experience: "competitivo", height: 188, availability: "ativo", notes: "" },
+        { id: uid(), name: "Julia Souza", gender: "feminino", skill: 3, positionMain: "central", positionSecond: "libero", experience: "intermediario", height: 180, availability: "ativo", notes: "" },
     ];
 }
 
@@ -991,11 +987,12 @@ function renderPlayers(){
         const skill = player.skill || 0;
         const dotClass = skill <= 2 ? "on-low" : skill === 3 ? "on-mid" : "on-high";
         const dots = Array.from({length:5}, (_, i) => `<span class="skill-dot ${i < skill ? dotClass : ""}"></span>`).join("");
+        const genderMark = player.gender === "feminino" ? ' <span style="color:var(--accent);font-size:10px;font-weight:800;">♀</span>' : "";
         return `
             <div class="player-card ${selected ? "selected" : ""}" onclick="togglePlayer('${player.id}')">
                 <span class="player-name">${escapeHtml(player.name)}</span>
                 <div class="player-meta">
-                    <span class="player-role">${role}</span>
+                    <span class="player-role">${role}${genderMark}</span>
                     <div class="skill-dots">${dots}</div>
                 </div>
                 <button class="player-edit" type="button" onclick="event.stopPropagation();editPlayer('${player.id}')" title="Editar">···</button>
@@ -1042,6 +1039,7 @@ function editPlayer(id){
     document.getElementById("deleteBtn").style.display = "flex";
 
     document.getElementById("playerName").value = player.name;
+    document.getElementById("playerGender").value = player.gender || "masculino";
     document.getElementById("positionMain").value = player.positionMain;
     document.getElementById("positionSecond").value = player.positionSecond || "";
     document.getElementById("experience").value = player.experience;
@@ -1072,9 +1070,6 @@ function setupEventListeners(){
     });
     document.getElementById("closeConfigBtn").addEventListener("click", closeConfigModal);
     document.getElementById("configForm").addEventListener("submit", handleDrawSubmit);
-    document.getElementById("mode").addEventListener("change", e => {
-        document.getElementById("mixedModeOptions").style.display = e.target.value === "misto" ? "grid" : "none";
-    });
     document.getElementById("redrawBtn").addEventListener("click", () => {
         if (selectedIds.length === 0) {
             alert("Selecione pelo menos um jogador!");
@@ -1082,7 +1077,7 @@ function setupEventListeners(){
         }
         const saved = JSON.parse(localStorage.getItem(CONFIG_KEY));
         if (!saved) return;
-        drawTeams(saved.formation, saved.mode, saved.womenPercentage);
+        drawTeams(saved.formation, saved.mode);
     });
     document.getElementById("clearBtn").addEventListener("click", () => {
         selectedIds = [];
@@ -1106,11 +1101,10 @@ function handleDrawSubmit(e){
     e.preventDefault();
     const formation = document.getElementById("formationType").value;
     const mode = document.getElementById("mode").value;
-    const womenPercentage = mode === "misto" ? parseInt(document.getElementById("womenPercentage").value) : 0;
 
-    localStorage.setItem(CONFIG_KEY, JSON.stringify({ formation, mode, womenPercentage }));
+    localStorage.setItem(CONFIG_KEY, JSON.stringify({ formation, mode }));
     document.getElementById("redrawBtn").style.display = "";
-    drawTeams(formation, mode, womenPercentage);
+    drawTeams(formation, mode);
     closeConfigModal();
 }
 
@@ -1141,6 +1135,7 @@ function savePlayer(e){
     e.preventDefault();
 
     const name = document.getElementById("playerName").value.trim();
+    const gender = document.getElementById("playerGender").value;
     const skill = parseInt(document.getElementById("playerForm").dataset.skill) || 3;
     const positionMain = document.getElementById("positionMain").value;
     const positionSecond = document.getElementById("positionSecond").value;
@@ -1158,6 +1153,7 @@ function savePlayer(e){
         const player = players.find(p => p.id === editingId);
         if (player) {
             player.name = name;
+            player.gender = gender;
             player.skill = skill;
             player.positionMain = positionMain;
             player.positionSecond = positionSecond;
@@ -1170,6 +1166,7 @@ function savePlayer(e){
         players.push({
             id: uid(),
             name,
+            gender,
             skill,
             positionMain,
             positionSecond,
@@ -1195,13 +1192,21 @@ function deletePlayer(){
     closeModal();
 }
 
-function drawTeams(formation, mode, womenPercentage){
+function drawTeams(formation, mode){
     if (selectedIds.length === 0) {
         alert("Selecione pelo menos um jogador!");
         return;
     }
 
-    const pool = players.filter(p => selectedIds.includes(p.id));
+    let pool = players.filter(p => selectedIds.includes(p.id));
+
+    if (mode === "feminino") {
+        pool = pool.filter(p => p.gender === "feminino");
+        if (pool.length === 0) {
+            alert("Nenhuma jogadora (♀) selecionada! Cadastre ou selecione jogadoras com gênero Feminino.");
+            return;
+        }
+    }
     const config = FORMATIONS[formation];
 
     let attempts = 500;
@@ -1210,7 +1215,7 @@ function drawTeams(formation, mode, womenPercentage){
     let bestConfidence = 0;
 
     for (let i = 0; i < attempts; i++) {
-        const { teams, score, confidence } = buildTeamsAttempt(pool, formation, mode, womenPercentage);
+        const { teams, score, confidence } = buildTeamsAttempt(pool, formation, mode);
         if (score < bestScore) {
             bestScore = score;
             bestTeams = teams;
@@ -1224,7 +1229,7 @@ function drawTeams(formation, mode, womenPercentage){
     updateStats();
 }
 
-function buildTeamsAttempt(pool, formation, mode, womenPercentage){
+function buildTeamsAttempt(pool, formation, mode){
     let teams = [];
     const config = FORMATIONS[formation];
 
@@ -1284,7 +1289,7 @@ function calculateScore(teams, formation, mode){
     // Experience balance (for training mode)
     if (mode === "treino") {
         const experiences = teams.map(t => {
-            const avgExp = t.players.reduce((sum, p) => p.skill, 0) / Math.max(1, t.players.length);
+            const avgExp = t.players.reduce((sum, p) => sum + p.skill, 0) / Math.max(1, t.players.length);
             return avgExp;
         });
         const avgExp = experiences.reduce((a, b) => a + b, 0) / experiences.length;
