@@ -895,7 +895,6 @@ textarea{
 
             <div class="dialog-actions">
                 <button class="btn" type="submit" style="grid-column:1/-1;">Sortear!</button>
-                <button class="btn secondary" type="button" id="cancelConfigBtn" style="display:none;">Cancelar</button>
             </div>
         </form>
     </div>
@@ -940,8 +939,14 @@ function init(){
 
 function loadData(){
     try {
-        players = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        selectedIds = JSON.parse(localStorage.getItem(SELECTED_KEY)) || [];
+        const rawPlayers = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const rawSelected = JSON.parse(localStorage.getItem(SELECTED_KEY));
+        players = Array.isArray(rawPlayers)
+            ? rawPlayers.filter(validatePlayer).map(migratePlayer)
+            : [];
+        selectedIds = Array.isArray(rawSelected)
+            ? rawSelected.filter(id => typeof id === "string")
+            : [];
     } catch (e) {
         players = [];
         selectedIds = [];
@@ -951,6 +956,29 @@ function loadData(){
         players = createDefaultPlayers();
         saveData();
     }
+
+    // Remove selectedIds apontando para jogadores inexistentes
+    const knownIds = new Set(players.map(p => p.id));
+    selectedIds = selectedIds.filter(id => knownIds.has(id));
+}
+
+function validatePlayer(p){
+    return p && typeof p === "object" && typeof p.id === "string" && typeof p.name === "string" && p.name.trim() !== "";
+}
+
+function migratePlayer(p){
+    return {
+        id: p.id,
+        name: p.name.trim(),
+        gender: p.gender === "feminino" ? "feminino" : "masculino",
+        skill: Number.isInteger(p.skill) && p.skill >= 0 && p.skill <= 5 ? p.skill : 3,
+        positionMain: p.positionMain || "ponteiro",
+        positionSecond: p.positionSecond || "",
+        experience: p.experience || "recreativo",
+        height: typeof p.height === "number" ? p.height : 0,
+        availability: p.availability === "inativo" ? "inativo" : "ativo",
+        notes: typeof p.notes === "string" ? p.notes : ""
+    };
 }
 
 function createDefaultPlayers(){
@@ -973,8 +1001,10 @@ function uid(){
 }
 
 function saveData(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
-    localStorage.setItem(SELECTED_KEY, JSON.stringify(selectedIds));
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(players));
+        localStorage.setItem(SELECTED_KEY, JSON.stringify(selectedIds));
+    } catch (e) { /* localStorage indisponível ou cheio */ }
 }
 
 function renderPlayers(){
@@ -983,7 +1013,7 @@ function renderPlayers(){
 
     grid.innerHTML = sorted.map(player => {
         const selected = selectedIds.includes(player.id);
-        const role = POSITIONS[player.positionMain] || player.positionMain;
+        const role = POSITIONS[player.positionMain] || escapeHtml(player.positionMain);
         const skill = player.skill || 0;
         const dotClass = skill <= 2 ? "on-low" : skill === 3 ? "on-mid" : "on-high";
         const dots = Array.from({length:5}, (_, i) => `<span class="skill-dot ${i < skill ? dotClass : ""}"></span>`).join("");
@@ -1077,8 +1107,9 @@ function setupEventListeners(){
             alert("Selecione pelo menos um jogador!");
             return;
         }
-        const saved = JSON.parse(localStorage.getItem(CONFIG_KEY));
-        if (!saved) return;
+        let saved;
+        try { saved = JSON.parse(localStorage.getItem(CONFIG_KEY)); } catch (e) { return; }
+        if (!saved || !saved.formation || !saved.mode) return;
         drawTeams(saved.formation, saved.mode);
     });
     document.getElementById("clearBtn").addEventListener("click", () => {
@@ -1209,9 +1240,8 @@ function drawTeams(formation, mode){
             return;
         }
     }
-    const config = FORMATIONS[formation];
 
-    let attempts = 500;
+    let attempts = 200;
     let bestTeams = null;
     let bestScore = Infinity;
     let bestConfidence = 0;
@@ -1233,40 +1263,31 @@ function drawTeams(formation, mode){
 
 function buildTeamsAttempt(pool, formation, mode){
     let teams = [];
-    const config = FORMATIONS[formation];
 
-    if (formation === "areia") {
-        teams = [
-            { name: "Time 1", players: [] },
-            { name: "Time 2", players: [] }
-        ];
-    } else if (formation === "quarteto") {
-        teams = [
-            { name: "Time 1", players: [] },
-            { name: "Time 2", players: [] }
-        ];
+    if (formation === "areia" || formation === "quarteto") {
+        teams = [{ name: "Time 1", players: [] }, { name: "Time 2", players: [] }];
     } else {
         const teamCount = formation === "livre" ? getTeamCount(pool.length) : 2;
-        teams = Array.from({ length: teamCount }, (_, i) => ({
-            name: `Time ${i + 1}`,
-            players: []
-        }));
+        teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
     }
 
-    // Shuffle pool
-    const shuffled = shuffle(pool);
+    // Agrupa por skill, embaralha dentro de cada grupo → snake draft real entre iterações
+    const bySkill = {};
+    pool.forEach(p => {
+        const s = p.skill ?? 3;
+        if (!bySkill[s]) bySkill[s] = [];
+        bySkill[s].push(p);
+    });
+    const sorted = Object.keys(bySkill)
+        .map(Number)
+        .sort((a, b) => b - a)
+        .flatMap(skill => shuffle(bySkill[skill]));
 
-    // Sort by skill descending
-    shuffled.sort((a, b) => b.skill - a.skill);
-
-    // Distribute
-    const teamsPerPlayer = teams.length;
-    shuffled.forEach((player, idx) => {
-        const teamIdx = idx % teamsPerPlayer;
-        teams[teamIdx].players.push(player);
+    const n = teams.length;
+    sorted.forEach((player, idx) => {
+        teams[idx % n].players.push(player);
     });
 
-    // Calculate metrics
     const score = calculateScore(teams, formation, mode);
     const confidence = calculateConfidence(teams, formation, mode);
 
@@ -1379,7 +1400,7 @@ function renderTeams(teams, confidence, formation, mode){
                 team.players.forEach(p => {
                     positionCounts[p.positionMain] = (positionCounts[p.positionMain] || 0) + 1;
                 });
-                const positions = Object.entries(positionCounts).map(([pos, count]) => `${POSITIONS[pos]} ×${count}`).join("  ·  ");
+                const positions = Object.entries(positionCounts).map(([pos, count]) => `${POSITIONS[pos] || escapeHtml(pos)} ×${count}`).join("  ·  ");
 
                 return `
                     <div class="team" style="border-color:${tc.color}33;">
@@ -1397,7 +1418,7 @@ function renderTeams(teams, confidence, formation, mode){
                                 <div class="team-player">
                                     <div class="player-order" style="background:${tc.color}20; color:${tc.color};">${idx + 1}</div>
                                     <strong>${escapeHtml(player.name)}</strong>
-                                    <span class="player-role-badge" style="background:${tc.color}18; color:${tc.color};">${POSITIONS[player.positionMain] || player.positionMain}</span>
+                                    <span class="player-role-badge" style="background:${tc.color}18; color:${tc.color};">${POSITIONS[player.positionMain] || escapeHtml(player.positionMain)}</span>
                                 </div>
                             `).join("")}
                         </div>
@@ -1430,6 +1451,10 @@ function initTheme(){
 }
 
 init();
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
 </script>
 </body>
 </html>
