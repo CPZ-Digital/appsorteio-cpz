@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handebol - Sorteador de Times</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='80'>🤾</text></svg>" type="image/svg+xml">
+<meta name="theme-color" content="#2e1065">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+    color-scheme:light;
+    --bg:#eef1f6; --surface:#ffffff; --surface-soft:#f5f7fa; --surface-strong:#e4e9f2;
+    --line:#d0d7e3; --text:#0f172a; --muted:#64748b;
+    --accent:#7c3aed; --accent-strong:#6d28d9; --accent-soft:#ede9fe;
+    --positive:#16a34a; --positive-soft:#dcfce7;
+    --warning:#d97706; --warning-soft:#fef3c7;
+    --danger:#dc2626; --danger-soft:#fee2e2;
+    --shadow:0 20px 60px rgba(15,23,42,0.13);
+    --header-from:#2e1065; --header-to:#4c1d95;
+    --font:'Inter',system-ui,-apple-system,sans-serif;
+    --team1:#7c3aed; --team1-soft:#ede9fe;
+    --team2:#2563eb; --team2-soft:#dbeafe;
+    --team3:#dc2626; --team3-soft:#fee2e2;
+    --team4:#16a34a; --team4-soft:#dcfce7;
+}
+html[data-theme='dark']{
+    color-scheme:dark;
+    --bg:#0a0f1e; --surface:#131929; --surface-soft:#0f1522; --surface-strong:#1c2438;
+    --line:#232d42; --text:#e2e8f0; --muted:#94a3b8;
+    --accent:#a78bfa; --accent-strong:#c4b5fd; --accent-soft:#2e1065;
+    --positive:#22c55e; --positive-soft:#14532d;
+    --warning:#f59e0b; --warning-soft:#451a03;
+    --danger:#f87171; --danger-soft:#450a0a;
+    --shadow:0 20px 60px rgba(0,0,0,0.45);
+    --header-from:#1a0050; --header-to:#2e1065;
+    --team1:#a78bfa; --team1-soft:#2e1065;
+    --team2:#3b82f6; --team2-soft:#1e3a5f;
+    --team3:#f87171; --team3-soft:#450a0a;
+    --team4:#22c55e; --team4-soft:#14532d;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; min-height:100vh; background:var(--bg); color:var(--text); font-family:var(--font); }
+button,input,select,textarea{ font:inherit; }
+button{ border:none; cursor:pointer; }
+h1,h2,h3,p{ margin:0; }
+.app{ width:min(100%,860px); margin:0 auto; padding-bottom:24px; }
+
+.topbar{ background:linear-gradient(135deg,var(--header-from) 0%,var(--header-to) 100%); padding:14px 20px 16px; display:flex; flex-direction:column; gap:14px; position:relative; overflow:hidden; }
+.topbar::before{ content:'🤾'; position:absolute; right:-10px; top:-14px; font-size:100px; opacity:0.07; pointer-events:none; user-select:none; }
+.back-btn{ display:inline-flex; align-items:center; gap:5px; color:rgba(255,255,255,0.75); font-size:12px; font-weight:700; text-decoration:none; padding:5px 11px; border-radius:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); align-self:flex-start; transition:background 120ms; }
+.back-btn:hover{ background:rgba(255,255,255,0.18); color:#fff; }
+.brand{ display:flex; flex-direction:column; gap:2px; }
+.brand h1{ font-size:20px; font-weight:900; color:#fff; letter-spacing:-0.3px; }
+.brand-sub{ font-size:12px; color:rgba(255,255,255,0.55); font-weight:500; }
+.stats-row{ display:flex; gap:8px; }
+.stat-pill{ display:flex; align-items:center; gap:6px; padding:6px 12px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:100px; }
+.stat-pill span{ font-size:11px; color:rgba(255,255,255,0.6); font-weight:600; }
+.stat-pill strong{ font-size:15px; font-weight:800; color:#fff; line-height:1; }
+
+.main-grid{ display:grid; grid-template-columns:1fr; gap:14px; padding:14px 14px 0; }
+.panel{ background:var(--surface); border:1px solid var(--line); box-shadow:0 4px 24px rgba(15,23,42,0.06); border-radius:16px; overflow:hidden; }
+.panel-head{ display:flex; align-items:center; gap:10px; padding:13px 14px; border-bottom:1px solid var(--line); background:var(--surface-soft); }
+.panel-icon{ width:30px; height:30px; border-radius:8px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+.panel-head-text{ flex:1; min-width:0; }
+.panel-head h2{ font-size:14px; font-weight:800; letter-spacing:-0.1px; }
+.hint{ color:var(--muted); font-size:11px; margin-top:2px; line-height:1.4; }
+
+.btn{ display:flex; align-items:center; justify-content:center; gap:6px; min-height:38px; padding:9px 16px; border-radius:10px; color:#fff; background:var(--accent); font-weight:700; font-size:14px; letter-spacing:-0.1px; transition:filter 120ms,transform 80ms; }
+.btn:active{ transform:scale(0.97); }
+.btn:hover{ filter:brightness(1.08); }
+.btn.secondary{ color:var(--text); background:var(--surface-strong); }
+.btn.danger{ color:#fff; background:var(--danger); }
+.btn:disabled{ cursor:not-allowed; filter:grayscale(0.6); opacity:0.5; }
+.btn-draw{ background:linear-gradient(135deg,#6d28d9,#a78bfa); color:#fff; font-weight:800; font-size:15px; min-height:48px; border-radius:12px; box-shadow:0 4px 16px rgba(124,58,237,0.35); }
+.btn-draw:hover{ filter:brightness(1.06); }
+.btn-redraw{ background:linear-gradient(135deg,var(--accent),var(--accent-strong)); box-shadow:0 4px 16px rgba(124,58,237,0.3); }
+
+.player-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding:12px; }
+.player-card{ position:relative; display:flex; flex-direction:column; justify-content:space-between; min-height:82px; padding:10px 10px 8px; border-radius:12px; background:var(--surface-soft); border:1.5px solid var(--line); cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; transition:border-color 120ms,background 120ms,box-shadow 120ms; }
+.player-card:active{ transform:scale(0.96); }
+.player-card.selected{ background:var(--accent-soft); border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+.player-card.add-card{ display:grid; place-items:center; min-height:82px; font-size:22px; font-weight:700; color:var(--muted); background:transparent; border:2px dashed var(--line); }
+.player-card.add-card:hover{ border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+.player-name{ display:block; font-size:14px; font-weight:800; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text); padding-right:18px; }
+.player-meta{ display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.player-role{ font-size:10px; color:var(--muted); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.skill-dots{ display:flex; gap:2px; flex-shrink:0; }
+.skill-dot{ width:5px; height:5px; border-radius:50%; background:var(--line); }
+.skill-dot.on-low{ background:#ef4444; }
+.skill-dot.on-mid{ background:#f59e0b; }
+.skill-dot.on-high{ background:#16a34a; }
+.player-edit{ all:unset; position:absolute; top:5px; right:5px; font-size:14px; color:var(--muted); cursor:pointer; line-height:1; padding:3px; border-radius:4px; }
+.player-edit:hover{ color:var(--accent); background:var(--accent-soft); }
+
+.actions-bar{ display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 12px 14px; }
+.actions-bar .btn-draw{ grid-column:1/-1; }
+
+.empty{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; min-height:220px; padding:24px; color:var(--muted); text-align:center; line-height:1.5; font-size:13px; }
+.empty-icon{ font-size:40px; opacity:0.4; }
+
+.teams-grid{ display:grid; grid-template-columns:1fr; gap:10px; padding:12px; }
+.team{ border-radius:12px; background:var(--surface-soft); border:1px solid var(--line); overflow:hidden; }
+.team-header{ padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; border-bottom:1px solid var(--line); }
+.team-color-bar{ width:4px; border-radius:2px; flex-shrink:0; align-self:stretch; }
+.team-title{ flex:1; font-size:14px; font-weight:800; letter-spacing:-0.1px; }
+.team-stats{ display:flex; gap:6px; flex-shrink:0; }
+.stat-badge{ padding:3px 8px; border-radius:20px; font-size:11px; font-weight:700; }
+.team-positions{ padding:6px 12px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--line); font-weight:500; }
+.team-body{ display:grid; gap:5px; padding:8px; }
+.team-player{ display:grid; grid-template-columns:28px 1fr auto; gap:8px; align-items:center; min-height:36px; padding:6px 8px; border-radius:8px; background:var(--surface); border:1px solid var(--line); }
+.player-order{ display:flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px; font-size:11px; font-weight:900; }
+.team-player strong{ font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.player-role-badge{ display:inline-flex; align-items:center; padding:2px 7px; border-radius:20px; font-size:10px; font-weight:700; white-space:nowrap; }
+
+.modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,0.6); z-index:20; backdrop-filter:blur(2px); }
+.modal.show{ display:flex; }
+.dialog{ width:min(400px,100%); background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); max-height:92vh; overflow-y:auto; }
+.dialog-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:14px 14px 12px; border-bottom:1px solid var(--line); position:sticky; top:0; background:var(--surface); z-index:1; }
+.dialog-head h2{ font-size:15px; font-weight:800; letter-spacing:-0.2px; }
+.close-btn{ all:unset; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:8px; background:var(--surface-strong); cursor:pointer; color:var(--muted); font-size:13px; }
+.close-btn:hover{ color:var(--text); }
+.dialog-body{ padding:14px; }
+.form-group{ display:grid; gap:6px; margin-bottom:12px; }
+label{ display:block; color:var(--muted); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; }
+input[type="text"],input[type="number"],select,textarea{ width:100%; min-height:38px; padding:9px 11px; color:var(--text); background:var(--surface-soft); border:1.5px solid var(--line); border-radius:9px; outline:none; font-weight:500; font-size:16px; }
+input:focus,select:focus,textarea:focus{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.15); }
+textarea{ min-height:60px; resize:vertical; font-family:var(--font); }
+.form-row{ display:grid; grid-template-columns:1fr; gap:10px; }
+@media(min-width:400px){ .form-row{ grid-template-columns:1fr 1fr; } }
+.dialog-actions{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+.star-rating{ display:flex; gap:5px; margin-top:4px; }
+.star-btn{ all:unset; width:38px; height:38px; display:flex; align-items:center; justify-content:center; border-radius:9px; background:var(--surface-soft); border:1.5px solid var(--line); cursor:pointer; font-size:17px; transition:all 100ms; }
+.star-btn:hover{ transform:scale(1.08); }
+.star-btn.active{ background:var(--warning-soft); border-color:var(--warning); }
+
+.footer-signature{ display:flex; align-items:center; justify-content:center; padding:18px 16px 8px; }
+.footer-signature img{ width:130px; height:auto; background:white; border-radius:8px; padding:4px 10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+
+@media(min-width:480px){ .player-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(min-width:640px){ .player-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); } .teams-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+</style>
+</head>
+<body>
+<main class="app">
+    <header class="topbar">
+        <a href="index.html" class="back-btn">← Início</a>
+        <div class="brand">
+            <h1>🤾 Handebol</h1>
+            <span class="brand-sub">Sorteio inteligente de times</span>
+        </div>
+        <div class="stats-row">
+            <div class="stat-pill"><span>Selecionados</span><strong id="statPlayers">0</strong></div>
+            <div class="stat-pill"><span>Times</span><strong id="statTeams">0</strong></div>
+        </div>
+    </header>
+
+    <section class="main-grid">
+        <section class="panel">
+            <div class="panel-head">
+                <div class="panel-icon">👥</div>
+                <div class="panel-head-text">
+                    <h2>Jogadores</h2>
+                    <p class="hint">Toque para selecionar · ··· para editar</p>
+                </div>
+            </div>
+            <div class="player-grid" id="playerGrid"></div>
+            <div class="actions-bar">
+                <button class="btn btn-draw" type="button" id="configBtn">⚙ Sortear</button>
+                <button class="btn btn-redraw" type="button" id="redrawBtn" style="display:none;">↺ Refazer</button>
+                <button class="btn secondary" type="button" id="clearBtn">Limpar</button>
+            </div>
+        </section>
+
+        <section class="panel" id="resultPanel" style="display:none;">
+            <div class="panel-head">
+                <div class="panel-icon">🏆</div>
+                <div class="panel-head-text">
+                    <h2>Times sorteados</h2>
+                    <p class="hint" id="confidenceHint"></p>
+                </div>
+            </div>
+            <div id="result">
+                <div class="empty"><div class="empty-icon">🤾</div>Clique em "Sortear" para gerar times equilibrados.</div>
+            </div>
+        </section>
+    </section>
+
+    <footer class="footer-signature"><img src="cpz-assinatura.png" alt="CPZ"></footer>
+</main>
+
+<div class="modal" id="playerModal">
+    <div class="dialog">
+        <div class="dialog-head">
+            <h2 id="modalTitle">Novo jogador</h2>
+            <button class="close-btn" id="closeModal">✕</button>
+        </div>
+        <form id="playerForm" class="dialog-body">
+            <div class="form-group">
+                <label for="playerName">Nome *</label>
+                <input id="playerName" type="text" maxlength="50" required placeholder="Ex: João Silva">
+            </div>
+            <div class="form-group">
+                <label for="playerGender">Gênero *</label>
+                <select id="playerGender" required>
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nota Técnica (0-5) *</label>
+                <div class="star-rating" id="skillRating"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="positionMain">Posição Principal *</label>
+                    <select id="positionMain" required>
+                        <option value="">Selecione</option>
+                        <option value="goleiro">Goleiro</option>
+                        <option value="armadorCentral">Armador Central</option>
+                        <option value="armadorEsq">Armador Esquerdo</option>
+                        <option value="armadorDir">Armador Direito</option>
+                        <option value="pontaEsq">Ponta Esquerda</option>
+                        <option value="pontaDir">Ponta Direita</option>
+                        <option value="pivo">Pivô</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="positionSecond">Posição Secundária</label>
+                    <select id="positionSecond">
+                        <option value="">Nenhuma</option>
+                        <option value="goleiro">Goleiro</option>
+                        <option value="armadorCentral">Armador Central</option>
+                        <option value="armadorEsq">Armador Esquerdo</option>
+                        <option value="armadorDir">Armador Direito</option>
+                        <option value="pontaEsq">Ponta Esquerda</option>
+                        <option value="pontaDir">Ponta Direita</option>
+                        <option value="pivo">Pivô</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="experience">Experiência *</label>
+                <select id="experience" required>
+                    <option value="">Selecione</option>
+                    <option value="iniciante">Iniciante</option>
+                    <option value="recreativo">Recreativo</option>
+                    <option value="intermediario">Intermediário</option>
+                    <option value="avancado">Avançado</option>
+                    <option value="competitivo">Competitivo</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="height">Altura (cm)</label>
+                    <input id="height" type="number" min="100" max="220" placeholder="Ex: 185">
+                </div>
+                <div class="form-group">
+                    <label for="availability">Disponibilidade</label>
+                    <select id="availability">
+                        <option value="ativo">Ativo</option>
+                        <option value="inativo">Inativo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="notes">Observações</label>
+                <textarea id="notes" placeholder="Notas adicionais..."></textarea>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn" type="submit">Salvar</button>
+                <button class="btn secondary" type="button" id="deleteBtn" style="display:none;">Excluir</button>
+                <button class="btn danger" type="button" id="cancelBtn">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="configModal">
+    <div class="dialog" style="width:min(340px,100%);">
+        <div class="dialog-head">
+            <h2>Configurar sorteio</h2>
+            <button class="close-btn" id="closeConfigBtn">✕</button>
+        </div>
+        <form id="configForm" class="dialog-body">
+            <div class="form-group">
+                <label for="formationType">Formação</label>
+                <select id="formationType">
+                    <option value="7x7">7x7 Oficial</option>
+                    <option value="treino">Treino (livre)</option>
+                    <option value="livre">Livre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="mode">Modo</label>
+                <select id="mode">
+                    <option value="pelada">Pelada (rápido e equilibrado)</option>
+                    <option value="treino">Treino (misturar forças)</option>
+                    <option value="campeonato">Campeonato (máxima competitividade)</option>
+                    <option value="feminino">Feminino (somente jogadoras ♀)</option>
+                </select>
+            </div>
+            <div class="dialog-actions">
+                <button class="btn" type="submit" style="grid-column:1/-1;">Sortear!</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+const STORAGE_KEY  = "handball-players-v1";
+const SELECTED_KEY = "handball-selected-v1";
+const CONFIG_KEY   = "handball-config-v1";
+
+const POSITIONS = {
+    goleiro:"Goleiro", armadorCentral:"Armador Central",
+    armadorEsq:"Armador Esq.", armadorDir:"Armador Dir.",
+    pontaEsq:"Ponta Esq.", pontaDir:"Ponta Dir.", pivo:"Pivô"
+};
+
+const FORMATIONS = {
+    "7x7":   { size:7, required:{ goleiro:1 } },
+    "treino":{ size:-1, required:{} },
+    "livre": { size:-1, required:{} }
+};
+
+function createDefaultPlayers(){
+    return [
+        { id:uid(), name:"Rafael Andrade",  gender:"masculino", skill:5, positionMain:"goleiro",        positionSecond:"",           experience:"competitivo",  height:190, availability:"ativo", notes:"" },
+        { id:uid(), name:"Ana Carolina",    gender:"feminino",  skill:4, positionMain:"armadorCentral", positionSecond:"armadorDir", experience:"avancado",     height:172, availability:"ativo", notes:"" },
+        { id:uid(), name:"Pedro Oliveira",  gender:"masculino", skill:4, positionMain:"armadorEsq",     positionSecond:"pontaEsq",   experience:"avancado",     height:182, availability:"ativo", notes:"" },
+        { id:uid(), name:"Mariana Fonseca", gender:"feminino",  skill:5, positionMain:"armadorDir",     positionSecond:"pivo",       experience:"competitivo",  height:175, availability:"ativo", notes:"" },
+        { id:uid(), name:"Lucas Moura",     gender:"masculino", skill:3, positionMain:"pontaEsq",       positionSecond:"",           experience:"intermediario",height:178, availability:"ativo", notes:"" },
+        { id:uid(), name:"Beatriz Lima",    gender:"feminino",  skill:3, positionMain:"pontaDir",       positionSecond:"armadorDir", experience:"intermediario",height:168, availability:"ativo", notes:"" },
+        { id:uid(), name:"Gabriel Teixeira",gender:"masculino", skill:4, positionMain:"pivo",           positionSecond:"armadorCentral",experience:"avancado",  height:196, availability:"ativo", notes:"" },
+        { id:uid(), name:"Camila Santos",   gender:"feminino",  skill:2, positionMain:"goleiro",        positionSecond:"",           experience:"recreativo",   height:165, availability:"ativo", notes:"" },
+        { id:uid(), name:"Matheus Costa",   gender:"masculino", skill:3, positionMain:"armadorCentral", positionSecond:"pivo",       experience:"recreativo",   height:184, availability:"ativo", notes:"" },
+        { id:uid(), name:"Sofia Barbosa",   gender:"feminino",  skill:4, positionMain:"pontaEsq",       positionSecond:"pontaDir",   experience:"avancado",     height:171, availability:"ativo", notes:"" },
+    ];
+}
+
+// ── MOTOR GENÉRICO ──────────────────────────────────────────────
+
+let players=[], selectedIds=[], editingId=null, lastDraw=null;
+
+function init(){
+    loadData(); renderPlayers(); setupEventListeners(); initTheme();
+    if(localStorage.getItem(CONFIG_KEY)) document.getElementById("redrawBtn").style.display="";
+}
+
+function loadData(){
+    try{
+        const rp=JSON.parse(localStorage.getItem(STORAGE_KEY));
+        const rs=JSON.parse(localStorage.getItem(SELECTED_KEY));
+        players    =Array.isArray(rp)?rp.filter(validatePlayer).map(migratePlayer):[];
+        selectedIds=Array.isArray(rs)?rs.filter(id=>typeof id==="string"):[];
+    }catch(e){ players=[]; selectedIds=[]; }
+    if(players.length===0){ players=createDefaultPlayers(); saveData(); }
+    const known=new Set(players.map(p=>p.id));
+    selectedIds=selectedIds.filter(id=>known.has(id));
+}
+
+function validatePlayer(p){ return p&&typeof p==="object"&&typeof p.id==="string"&&typeof p.name==="string"&&p.name.trim()!==""; }
+function migratePlayer(p){
+    return { id:p.id, name:p.name.trim(), gender:p.gender==="feminino"?"feminino":"masculino",
+        skill:Number.isInteger(p.skill)&&p.skill>=0&&p.skill<=5?p.skill:3,
+        positionMain:p.positionMain||"armadorCentral", positionSecond:p.positionSecond||"",
+        experience:p.experience||"recreativo", height:typeof p.height==="number"?p.height:0,
+        availability:p.availability==="inativo"?"inativo":"ativo", notes:typeof p.notes==="string"?p.notes:"" };
+}
+
+function saveData(){
+    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(players)); localStorage.setItem(SELECTED_KEY,JSON.stringify(selectedIds)); }catch(e){}
+}
+
+function renderPlayers(){
+    const grid=document.getElementById("playerGrid");
+    const sorted=players.slice().sort((a,b)=>a.name.localeCompare(b.name));
+    grid.innerHTML=sorted.map(player=>{
+        const sel=selectedIds.includes(player.id);
+        const role=POSITIONS[player.positionMain]||escapeHtml(player.positionMain);
+        const skill=player.skill||0;
+        const dc=skill<=2?"on-low":skill===3?"on-mid":"on-high";
+        const dots=Array.from({length:5},(_,i)=>`<span class="skill-dot ${i<skill?dc:""}"></span>`).join("");
+        const gm=player.gender==="feminino"?' <span style="color:#db2777;font-size:10px;font-weight:800;">♀</span>':' <span style="color:var(--accent);font-size:10px;font-weight:800;">♂</span>';
+        return `<div class="player-card ${sel?"selected":""}" onclick="togglePlayer('${player.id}')">
+            <span class="player-name">${escapeHtml(player.name)}</span>
+            <div class="player-meta"><span class="player-role">${role}${gm}</span><div class="skill-dots">${dots}</div></div>
+            <button class="player-edit" type="button" onclick="event.stopPropagation();editPlayer('${player.id}')" title="Editar">···</button>
+        </div>`;
+    }).join("")+`<button class="player-card add-card" type="button" onclick="createPlayer()">+</button>`;
+    updateStats();
+}
+
+function updateStats(){ document.getElementById("statPlayers").textContent=selectedIds.length; document.getElementById("statTeams").textContent=lastDraw?lastDraw.teams.length:0; }
+function togglePlayer(id){ selectedIds=selectedIds.includes(id)?selectedIds.filter(s=>s!==id):[...selectedIds,id]; saveData(); renderPlayers(); }
+function createPlayer(){ editingId=null; document.getElementById("modalTitle").textContent="Novo jogador"; document.getElementById("deleteBtn").style.display="none"; document.getElementById("playerForm").reset(); updateSkillRating(3); document.getElementById("playerModal").classList.add("show"); document.getElementById("playerName").focus(); }
+function editPlayer(id){ editingId=id; const p=players.find(x=>x.id===id); if(!p) return; document.getElementById("modalTitle").textContent="Editar jogador"; document.getElementById("deleteBtn").style.display="flex"; document.getElementById("playerName").value=p.name; document.getElementById("playerGender").value=p.gender||"masculino"; document.getElementById("positionMain").value=p.positionMain; document.getElementById("positionSecond").value=p.positionSecond||""; document.getElementById("experience").value=p.experience; document.getElementById("height").value=p.height||""; document.getElementById("availability").value=p.availability||"ativo"; document.getElementById("notes").value=p.notes||""; updateSkillRating(p.skill); document.getElementById("playerModal").classList.add("show"); }
+function closeModal(){ document.getElementById("playerModal").classList.remove("show"); editingId=null; }
+
+function setupEventListeners(){
+    document.getElementById("playerForm").addEventListener("submit",savePlayer);
+    document.getElementById("closeModal").addEventListener("click",closeModal);
+    document.getElementById("cancelBtn").addEventListener("click",closeModal);
+    document.getElementById("deleteBtn").addEventListener("click",deletePlayer);
+    document.getElementById("configBtn").addEventListener("click",()=>{ if(selectedIds.length===0){ alert("Selecione pelo menos um jogador!"); return; } document.getElementById("configModal").classList.add("show"); });
+    document.getElementById("closeConfigBtn").addEventListener("click",closeConfigModal);
+    document.getElementById("configForm").addEventListener("submit",handleDrawSubmit);
+    document.getElementById("redrawBtn").addEventListener("click",()=>{ if(selectedIds.length===0){ alert("Selecione pelo menos um jogador!"); return; } let s; try{ s=JSON.parse(localStorage.getItem(CONFIG_KEY)); }catch(e){ return; } if(!s||!s.formation||!s.mode) return; drawTeams(s.formation,s.mode); });
+    document.getElementById("clearBtn").addEventListener("click",()=>{ selectedIds=[]; saveData(); renderPlayers(); });
+    document.getElementById("playerModal").addEventListener("click",e=>{ if(e.target===document.getElementById("playerModal")) closeModal(); });
+    document.getElementById("configModal").addEventListener("click",e=>{ if(e.target===document.getElementById("configModal")) closeConfigModal(); });
+    renderSkillRating();
+}
+function closeConfigModal(){ document.getElementById("configModal").classList.remove("show"); }
+function handleDrawSubmit(e){ e.preventDefault(); const formation=document.getElementById("formationType").value; const mode=document.getElementById("mode").value; localStorage.setItem(CONFIG_KEY,JSON.stringify({formation,mode})); document.getElementById("redrawBtn").style.display=""; drawTeams(formation,mode); closeConfigModal(); }
+function renderSkillRating(){ const c=document.getElementById("skillRating"); c.innerHTML=Array.from({length:5},(_,i)=>`<button type="button" class="star-btn" data-value="${i+1}">★</button>`).join(""); c.querySelectorAll(".star-btn").forEach(btn=>btn.addEventListener("click",()=>updateSkillRating(parseInt(btn.dataset.value)))); }
+function updateSkillRating(v){ document.querySelectorAll("#skillRating .star-btn").forEach(btn=>btn.classList.toggle("active",parseInt(btn.dataset.value)<=v)); document.getElementById("playerForm").dataset.skill=v; }
+
+function savePlayer(e){
+    e.preventDefault();
+    const name=document.getElementById("playerName").value.trim();
+    const gender=document.getElementById("playerGender").value;
+    const skill=parseInt(document.getElementById("playerForm").dataset.skill)||3;
+    const positionMain=document.getElementById("positionMain").value;
+    const positionSecond=document.getElementById("positionSecond").value;
+    const experience=document.getElementById("experience").value;
+    const height=document.getElementById("height").value?parseInt(document.getElementById("height").value):0;
+    const availability=document.getElementById("availability").value;
+    const notes=document.getElementById("notes").value.trim();
+    if(!name||!positionMain||!experience){ alert("Preencha todos os campos obrigatórios!"); return; }
+    if(editingId){ const p=players.find(x=>x.id===editingId); if(p) Object.assign(p,{name,gender,skill,positionMain,positionSecond,experience,height,availability,notes}); }
+    else { const p={id:uid(),name,gender,skill,positionMain,positionSecond,experience,height,availability,notes}; players.push(p); selectedIds.push(p.id); }
+    saveData(); renderPlayers(); closeModal();
+}
+function deletePlayer(){ if(!editingId) return; players=players.filter(p=>p.id!==editingId); selectedIds=selectedIds.filter(id=>id!==editingId); saveData(); renderPlayers(); closeModal(); }
+
+function drawTeams(formation,mode){
+    if(selectedIds.length===0){ alert("Selecione pelo menos um jogador!"); return; }
+    let pool=players.filter(p=>selectedIds.includes(p.id));
+    if(mode==="feminino"){ pool=pool.filter(p=>p.gender==="feminino"); if(pool.length===0){ alert("Nenhuma jogadora (♀) selecionada!"); return; } }
+    let best=null,bestScore=Infinity,bestConf=0;
+    for(let i=0;i<200;i++){
+        const {teams,score,confidence}=buildTeamsAttempt(pool,formation,mode);
+        if(score<bestScore){ bestScore=score; best=teams; bestConf=confidence; }
+    }
+    lastDraw={teams:best,score:bestScore,confidence:bestConf};
+    renderTeams(best,bestConf,formation,mode);
+    document.getElementById("resultPanel").style.display="block";
+    updateStats();
+}
+
+function buildTeamsAttempt(pool,formation,mode){
+    const n=(formation==="treino"||formation==="livre")?getTeamCount(pool.length):2;
+    const teams=Array.from({length:n},(_,i)=>({name:`Time ${i+1}`,players:[]}));
+    const bySkill={};
+    pool.forEach(p=>{ const s=p.skill??3; if(!bySkill[s]) bySkill[s]=[]; bySkill[s].push(p); });
+    const sorted=Object.keys(bySkill).map(Number).sort((a,b)=>b-a).flatMap(s=>shuffle(bySkill[s]));
+    sorted.forEach((p,i)=>teams[i%n].players.push(p));
+    return {teams, score:calculateScore(teams,formation,mode), confidence:calculateConfidence(teams,formation,mode)};
+}
+
+function calculateScore(teams,formation,mode){
+    let score=0;
+    const skills=teams.map(t=>t.players.reduce((s,p)=>s+p.skill,0));
+    const avgS=skills.reduce((a,b)=>a+b,0)/skills.length;
+    score+=skills.reduce((s,x)=>s+Math.abs(x-avgS),0)*10;
+    const sizes=teams.map(t=>t.players.length);
+    score+=(Math.max(...sizes)-Math.min(...sizes))*20;
+    if(mode==="treino"){
+        const exps=teams.map(t=>t.players.reduce((s,p)=>s+p.skill,0)/Math.max(1,t.players.length));
+        const avgE=exps.reduce((a,b)=>a+b,0)/exps.length;
+        score+=exps.reduce((s,e)=>s+Math.abs(e-avgE),0)*8;
+    }
+    const req=FORMATIONS[formation]?.required||{};
+    Object.keys(req).forEach(pos=>{ teams.forEach(t=>{ const cnt=t.players.filter(p=>p.positionMain===pos).length; if(cnt<req[pos]) score+=(req[pos]-cnt)*60; }); });
+    return Math.round(score);
+}
+
+function calculateConfidence(teams,formation,mode){
+    let c=100;
+    const skills=teams.map(t=>t.players.reduce((s,p)=>s+p.skill,0));
+    const avg=skills.reduce((a,b)=>a+b,0)/skills.length;
+    const diff=Math.max(...skills)-Math.min(...skills);
+    if(diff>avg*0.3) c-=10; if(diff>avg*0.5) c-=15;
+    const req=FORMATIONS[formation]?.required||{};
+    const missing=teams.reduce((s,t)=>s+Object.keys(req).reduce((ts,pos)=>ts+Math.max(0,req[pos]-t.players.filter(p=>p.positionMain===pos).length),0),0);
+    if(missing>0) c-=missing*5;
+    return Math.max(0,c);
+}
+
+function shuffle(arr){ const r=arr.slice(); for(let i=r.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [r[i],r[j]]=[r[j],r[i]]; } return r; }
+function getTeamCount(n){ return n<=10?2:n<=18?3:4; }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+
+function renderTeams(teams,confidence,formation,mode){
+    const COLORS=[{color:"var(--team1)",soft:"var(--team1-soft)"},{color:"var(--team2)",soft:"var(--team2-soft)"},{color:"var(--team3)",soft:"var(--team3-soft)"},{color:"var(--team4)",soft:"var(--team4-soft)"}];
+    document.getElementById("confidenceHint").textContent=`Índice de confiança: ${getConfidenceLabel(confidence)} (${confidence}%)`;
+    document.getElementById("result").innerHTML=`<div class="teams-grid">${teams.map((team,ti)=>{
+        const tc=COLORS[ti%COLORS.length];
+        const str=team.players.reduce((s,p)=>s+p.skill,0);
+        const posCounts={};
+        team.players.forEach(p=>{ posCounts[p.positionMain]=(posCounts[p.positionMain]||0)+1; });
+        const pos=Object.entries(posCounts).map(([p,n])=>`${POSITIONS[p]||escapeHtml(p)} ×${n}`).join("  ·  ");
+        return `<div class="team" style="border-color:${tc.color}33;">
+            <div class="team-header" style="background:${tc.soft};border-bottom-color:${tc.color}33;">
+                <div class="team-color-bar" style="background:${tc.color};"></div>
+                <div class="team-title" style="color:${tc.color};">${team.name}</div>
+                <div class="team-stats">
+                    <span class="stat-badge" style="background:${tc.color}22;color:${tc.color};">${team.players.length} jogadores</span>
+                    <span class="stat-badge" style="background:${tc.color}22;color:${tc.color};">⚡ ${str}</span>
+                </div>
+            </div>
+            <div class="team-positions">${pos}</div>
+            <div class="team-body">${team.players.map((p,i)=>`
+                <div class="team-player">
+                    <div class="player-order" style="background:${tc.color}20;color:${tc.color};">${i+1}</div>
+                    <strong>${escapeHtml(p.name)}</strong>
+                    <span class="player-role-badge" style="background:${tc.color}18;color:${tc.color};">${POSITIONS[p.positionMain]||escapeHtml(p.positionMain)}</span>
+                </div>`).join("")}
+            </div>
+        </div>`;
+    }).join("")}</div>`;
+}
+
+function getConfidenceLabel(c){ return c>=90?"Excelente":c>=80?"Bom":c>=70?"Regular":"Aceitável"; }
+function escapeHtml(t){ const d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
+function initTheme(){ const m=window.matchMedia("(prefers-color-scheme: dark)"); document.documentElement.dataset.theme=m.matches?"dark":"light"; m.addEventListener("change",e=>{ document.documentElement.dataset.theme=e.matches?"dark":"light"; }); }
+
+init();
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }
+</script>
+</body>
+</html>

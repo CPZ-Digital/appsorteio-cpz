@@ -1,5 +1,13 @@
-const CACHE = "appsorteio-v1";
-const ASSETS = ["./", "./index.html", "./cpz-assinatura.png"];
+const CACHE = "appsorteio-v2";
+const ASSETS = [
+    "./",
+    "./index.html",
+    "./volei.html",
+    "./futebol.html",
+    "./basquete.html",
+    "./handebol.html",
+    "./cpz-assinatura.png"
+];
 
 self.addEventListener("install", e => {
     e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
