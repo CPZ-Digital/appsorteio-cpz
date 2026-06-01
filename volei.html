@@ -731,6 +731,9 @@ textarea{
     padding:4px 10px;
     box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
+.btn-export{ all:unset; display:inline-flex; align-items:center; gap:4px; padding:5px 11px; border-radius:8px; background:var(--accent-soft); color:var(--accent); font-size:11px; font-weight:700; cursor:pointer; border:1px solid var(--accent); transition:filter 100ms,transform 80ms; flex-shrink:0; white-space:nowrap; }
+.btn-export:hover{ filter:brightness(0.92); }
+.btn-export:active{ transform:scale(0.95); }
 </style>
 </head>
 <body>
@@ -777,6 +780,7 @@ textarea{
                     <h2>Times sorteados</h2>
                     <p class="hint" id="confidenceHint"></p>
                 </div>
+                <button class="btn-export" type="button" id="exportBtn" onclick="exportTeams()">↗ Exportar</button>
             </div>
             <div id="result">
                 <div class="empty">
@@ -1468,6 +1472,31 @@ function initTheme(){
     prefersDark.addEventListener("change", e => {
         document.documentElement.dataset.theme = e.matches ? "dark" : "light";
     });
+}
+
+function exportTeams(){
+    if(!lastDraw) return;
+    const sport=document.querySelector('.brand h1')?.textContent||'Times';
+    const hint=document.getElementById('confidenceHint')?.textContent||'';
+    const lines=[`${sport} — Times Sorteados`,hint,''];
+    lastDraw.teams.forEach(team=>{
+        const str=team.players.reduce((s,p)=>s+p.skill,0);
+        lines.push(`${team.name}  ⚡ ${str}`);
+        team.players.forEach((p,i)=>{ lines.push(`${i+1}. ${p.name} — ${POSITIONS[p.positionMain]||p.positionMain}`); });
+        lines.push('');
+    });
+    const text=lines.join('\n').trim();
+    const btn=document.getElementById('exportBtn');
+    if(navigator.share){ navigator.share({title:`${sport} — Times`,text}).catch(()=>{}); return; }
+    const showCopied=()=>{ const o=btn.innerHTML; btn.innerHTML='✓ Copiado!'; setTimeout(()=>{btn.innerHTML=o;},2000); };
+    navigator.clipboard ? navigator.clipboard.writeText(text).then(showCopied).catch(()=>{fallbackCopy(text);showCopied();}) : (fallbackCopy(text),showCopied());
+}
+function fallbackCopy(text){
+    const ta=document.createElement('textarea');
+    ta.value=text; ta.style.cssText='position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);
 }
 
 init();
