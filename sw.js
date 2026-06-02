@@ -1,4 +1,4 @@
-const CACHE = "appsorteio-v4";
+const CACHE = "appsorteio-v6";
 const ASSETS = [
     "./",
     "./index.html",
@@ -6,7 +6,12 @@ const ASSETS = [
     "./futebol.html",
     "./basquete.html",
     "./handebol.html",
-    "./cpz-assinatura.png"
+    "./cpz-assinatura.png",
+    "./icon-192.png",
+    "./sport-volei.png",
+    "./sport-futebol.png",
+    "./sport-basquete.png",
+    "./sport-handebol.png"
 ];
 
 self.addEventListener("install", e => {

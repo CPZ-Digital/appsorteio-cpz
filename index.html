@@ -50,12 +50,13 @@ h1,h2,h3,p{ margin:0; }
     position:relative;
     overflow:hidden;
 }
-.topbar::before{
-    content:'🎯';
+.topbar-mascot{
     position:absolute;
-    right:-10px;top:-14px;
-    font-size:110px;opacity:0.07;
+    right:-8px;top:-8px;
+    width:110px;height:110px;
+    opacity:0.18;
     pointer-events:none;user-select:none;
+    object-fit:contain;
 }
 .home-title{
     font-size:26px;font-weight:900;color:#fff;
@@ -117,7 +118,7 @@ h1,h2,h3,p{ margin:0; }
 .sport-card.handebol::before { background:#7c3aed08; }
 .sport-card.handebol:hover   { border-color:#7c3aed; box-shadow:0 4px 20px #7c3aed25; }
 
-.sport-emoji{ font-size:44px; line-height:1; }
+.sport-emoji{ width:72px; height:72px; object-fit:contain; display:block; }
 .sport-name{
     font-size:16px;font-weight:800;letter-spacing:-0.2px;
     position:relative;z-index:1;
@@ -159,7 +160,8 @@ html[data-theme='dark'] .sport-card.handebol .sport-badge{ background:#2e1065;co
 <body>
 <main class="app">
     <header class="topbar">
-        <h1 class="home-title">🎯 Sorteador de Times</h1>
+        <img src="icon-192.png" class="topbar-mascot" alt="">
+        <h1 class="home-title">Sorteia Aí!</h1>
         <p class="home-sub">Escolha a modalidade</p>
     </header>
 
@@ -168,25 +170,25 @@ html[data-theme='dark'] .sport-card.handebol .sport-badge{ background:#2e1065;co
         <div class="sport-grid">
             <a href="volei.html" class="sport-card volei">
                 <span class="sport-badge">Ativo</span>
-                <span class="sport-emoji">🤸</span>
+                <img class="sport-emoji" src="sport-volei.png" alt="Vôlei">
                 <span class="sport-name">Vôlei</span>
                 <span class="sport-desc">Times equilibrados por posição e nível</span>
             </a>
             <a href="futebol.html" class="sport-card futebol">
                 <span class="sport-badge">Ativo</span>
-                <span class="sport-emoji">🏃</span>
+                <img class="sport-emoji" src="sport-futebol.png" alt="Futebol">
                 <span class="sport-name">Futebol</span>
                 <span class="sport-desc">Society, futsal, campo e pelada</span>
             </a>
             <a href="basquete.html" class="sport-card basquete">
                 <span class="sport-badge">Ativo</span>
-                <span class="sport-emoji">⛹️</span>
+                <img class="sport-emoji" src="sport-basquete.png" alt="Basquete">
                 <span class="sport-name">Basquete</span>
                 <span class="sport-desc">5x5 oficial e 3x3 olímpico</span>
             </a>
             <a href="handebol.html" class="sport-card handebol">
                 <span class="sport-badge">Ativo</span>
-                <span class="sport-emoji">🤾</span>
+                <img class="sport-emoji" src="sport-handebol.png" alt="Handebol">
                 <span class="sport-name">Handebol</span>
                 <span class="sport-desc">7x7 oficial e formações livres</span>
             </a>
