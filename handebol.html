@@ -50,7 +50,7 @@ h1,h2,h3,p{ margin:0; }
 .app{ width:min(100%,860px); margin:0 auto; padding-bottom:24px; }
 
 .topbar{ background:linear-gradient(135deg,var(--header-from) 0%,var(--header-to) 100%); padding:14px 20px 16px; display:flex; flex-direction:column; gap:14px; position:relative; overflow:hidden; }
-.topbar::before{ content:'🤾'; position:absolute; right:-10px; top:-14px; font-size:100px; opacity:0.07; pointer-events:none; user-select:none; }
+.topbar::before{ content:''; position:absolute; right:-10px; top:-14px; width:110px; height:110px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23f97316'/%3E%3Ccircle cx='50' cy='50' r='46' fill='none' stroke='%23111' stroke-width='3'/%3E%3Cpath d='M50,4 Q72,28 72,50 Q72,72 50,96' fill='none' stroke='%23111' stroke-width='2.5'/%3E%3Cpath d='M50,4 Q28,28 28,50 Q28,72 50,96' fill='none' stroke='%23111' stroke-width='2.5'/%3E%3Cpath d='M4,50 Q28,28 50,28 Q72,28 96,50' fill='none' stroke='%23111' stroke-width='2.5'/%3E%3Cpath d='M4,50 Q28,72 50,72 Q72,72 96,50' fill='none' stroke='%23111' stroke-width='2.5'/%3E%3C/svg%3E"); background-size:contain; background-repeat:no-repeat; opacity:0.15; pointer-events:none; user-select:none; }
 .back-btn{ display:inline-flex; align-items:center; gap:5px; color:rgba(255,255,255,0.75); font-size:12px; font-weight:700; text-decoration:none; padding:5px 11px; border-radius:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); align-self:flex-start; transition:background 120ms; }
 .back-btn:hover{ background:rgba(255,255,255,0.18); color:#fff; }
 .brand{ display:flex; flex-direction:column; gap:2px; }
