@@ -1,4 +1,4 @@
-const CACHE = "appsorteio-v14";
+const CACHE = "appsorteio-v15";
 const ASSETS = [
     "./",
     "./index.html",
