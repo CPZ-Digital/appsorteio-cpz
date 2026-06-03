@@ -769,6 +769,7 @@ textarea{
             <div class="actions-bar">
                 <button class="btn btn-draw" type="button" id="configBtn">⚙ Sortear</button>
                 <button class="btn btn-redraw" type="button" id="redrawBtn" style="display:none;">↺ Refazer</button>
+                <button class="btn secondary" type="button" id="paywallBtn" style="display:none;">🔓 Premium</button>
                 <button class="btn secondary" type="button" id="clearBtn">Limpar</button>
             </div>
         </section>
@@ -795,6 +796,13 @@ textarea{
         <img src="cpz-assinatura.png" alt="CPZ">
     </footer>
 </main>
+
+<div id="adBanner" style="position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--surface);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;z-index:100;gap:8px;">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);opacity:0.6;">Publicidade</span>
+    <div style="flex:1;max-width:320px;height:50px;background:var(--surface-soft);border-radius:6px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:11px;color:var(--muted);">AdMob Banner</span>
+    </div>
+</div>
 
 <div class="modal" id="playerModal">
     <div class="dialog">
@@ -888,6 +896,37 @@ textarea{
     </div>
 </div>
 
+<div class="modal" id="paywallModal">
+    <div class="dialog" style="width:min(360px,100%);">
+        <div class="dialog-head">
+            <h2 id="paywallTitle">Premium</h2>
+            <button class="close-btn" id="closePaywallBtn">✕</button>
+        </div>
+        <div class="dialog-body">
+            <div style="text-align:center;margin-bottom:16px;">
+                <div style="font-size:44px;margin-bottom:8px;">🏆</div>
+                <p style="font-weight:800;font-size:16px;margin:0 0 4px;">Desbloqueie tudo neste esporte</p>
+                <p style="color:var(--muted);font-size:13px;margin:0;">Pague uma vez, use para sempre</p>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0 0 16px;display:grid;gap:8px;">
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Formações específicas (5x1, 6x2, 4x2...)</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Modos de jogo (Treino, Campeonato, Misto)</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Equilíbrio avançado por posição</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Refazer com mesma configuração</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Sem anúncios neste esporte</li>
+            </ul>
+            <div style="text-align:center;background:var(--accent-soft);border-radius:12px;padding:12px 16px;margin-bottom:16px;">
+                <span style="font-size:26px;font-weight:900;color:var(--accent);">R$ 9,90</span>
+                <p style="color:var(--muted);font-size:11px;margin:2px 0 0;">compra única · só este esporte</p>
+            </div>
+            <div style="display:grid;gap:8px;">
+                <button class="btn success" id="unlockBtn">🔓 Desbloquear — Teste gratuito</button>
+                <button class="btn danger" id="revokePremiumBtn" style="display:none;font-size:12px;">↩ Voltar para Free (Teste)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="configModal">
     <div class="dialog" style="width:min(340px,100%);">
         <div class="dialog-head">
@@ -924,6 +963,7 @@ textarea{
     </div>
 </div>
 
+<script src="premium.js"></script>
 <script>
 const STORAGE_KEY = "volley-sorter-players-v1";
 const SELECTED_KEY = "volley-sorter-selected-v1";
@@ -1118,10 +1158,8 @@ function setupEventListeners(){
     document.getElementById("cancelBtn").addEventListener("click", closeModal);
     document.getElementById("deleteBtn").addEventListener("click", deletePlayer);
     document.getElementById("configBtn").addEventListener("click", () => {
-        if (selectedIds.length === 0) {
-            alert("Selecione pelo menos um jogador!");
-            return;
-        }
+        if (selectedIds.length === 0) { alert("Selecione pelo menos um jogador!"); return; }
+        if (!isPremium("volei")) { drawTeams("livre", "pelada"); return; }
         document.getElementById("configModal").classList.add("show");
     });
     document.getElementById("closeConfigBtn").addEventListener("click", closeConfigModal);
@@ -1500,6 +1538,7 @@ function fallbackCopy(text){
 }
 
 init();
+initPremiumUI("volei", "Vôlei");
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
