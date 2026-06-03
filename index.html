@@ -43,28 +43,8 @@ h1,h2,h3,p{ margin:0; }
 .app{ width:min(100%,520px); margin:0 auto; padding-bottom:24px; }
 
 /* HEADER */
-.topbar{
-    background:linear-gradient(135deg,var(--header-from) 0%,var(--header-to) 100%);
-    padding:32px 20px 28px;
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-}
-.topbar-mascot{
-    position:absolute;
-    right:-8px;top:-8px;
-    width:110px;height:110px;
-    opacity:0.18;
-    pointer-events:none;user-select:none;
-    object-fit:contain;
-}
-.home-title{
-    font-size:26px;font-weight:900;color:#fff;
-    letter-spacing:-0.5px;margin-bottom:6px;
-}
-.home-sub{
-    font-size:13px;color:rgba(255,255,255,0.6);font-weight:500;
-}
+.topbar{ overflow:hidden; line-height:0; }
+.topbar-banner{ width:100%; height:auto; display:block; }
 
 /* SPORT GRID */
 .sport-section{ padding:16px 14px 0; }
@@ -160,9 +140,7 @@ html[data-theme='dark'] .sport-card.handebol .sport-badge{ background:#2e1065;co
 <body>
 <main class="app">
     <header class="topbar">
-        <img src="icon-192.png" class="topbar-mascot" alt="">
-        <h1 class="home-title">Sorteia Aí!</h1>
-        <p class="home-sub">Escolha a modalidade</p>
+        <img src="banner-home.png" class="topbar-banner" alt="Sorteia Aí!">
     </header>
 
     <section class="sport-section">

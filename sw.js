@@ -1,4 +1,4 @@
-const CACHE = "appsorteio-v13";
+const CACHE = "appsorteio-v14";
 const ASSETS = [
     "./",
     "./index.html",
@@ -8,6 +8,7 @@ const ASSETS = [
     "./handebol.html",
     "./cpz-assinatura.png",
     "./icon-192.png",
+    "./banner-home.png",
     "./sport-volei.png",
     "./sport-futebol.png",
     "./sport-basquete.png",
