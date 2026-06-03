@@ -1317,10 +1317,12 @@ function drawTeams(formation, mode){
         }
     }
 
+    applyLockedPlayers(bestTeams, pool, "volei");
     lastDraw = { teams: bestTeams, score: bestScore, confidence: bestConfidence };
     renderTeams(bestTeams, bestConfidence, formation, mode);
     document.getElementById("resultPanel").style.display = "block";
     updateStats();
+    setupTeamInteractivity(bestTeams, "volei", formation, mode);
 }
 
 function buildTeamsAttempt(pool, formation, mode){

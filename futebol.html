@@ -585,10 +585,12 @@ function drawTeams(formation,mode){
         const {teams,score,confidence}=buildTeamsAttempt(pool,formation,mode);
         if(score<bestScore){ bestScore=score; best=teams; bestConf=confidence; }
     }
+    applyLockedPlayers(best,pool,"futebol");
     lastDraw={teams:best,score:bestScore,confidence:bestConf};
     renderTeams(best,bestConf,formation,mode);
     document.getElementById("resultPanel").style.display="block";
     updateStats();
+    setupTeamInteractivity(best,"futebol",formation,mode);
 }
 
 function buildTeamsAttempt(pool,formation,mode){
