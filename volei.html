@@ -1327,16 +1327,28 @@ function drawTeams(formation, mode){
 
 function buildTeamsAttempt(pool, formation, mode){
     const _fs = FORMATIONS[formation]?.size ?? -1;
+    // Areia/quarteto têm tamanho de time fixo e estrito
+    const isStrict = formation === "areia" || formation === "quarteto";
 
-    // Contagem de times: completos + banco se sobrar >= 2 jogadores
     let teamCount;
+    let useFormationSize = false;
+
     if (_fs > 0) {
         const full = Math.floor(pool.length / _fs);
-        const leftover = pool.length % _fs;
-        teamCount = Math.max(2, full + (leftover >= 2 ? 1 : 0));
+        if (isStrict || full >= 2) {
+            // Usa tamanho da formação quando dá para 2+ times completos (ou é estrita)
+            const leftover = pool.length % _fs;
+            teamCount = Math.max(2, full + (leftover >= 2 ? 1 : 0));
+            useFormationSize = true;
+        } else {
+            // Não cabe 2 times completos → distribui igualmente como "livre"
+            teamCount = getTeamCount(pool.length);
+        }
     } else {
         teamCount = getTeamCount(pool.length);
     }
+    teamCount = Math.max(2, teamCount);
+
     const teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
 
     // Agrupa por skill, embaralha dentro de cada grupo
@@ -1351,8 +1363,8 @@ function buildTeamsAttempt(pool, formation, mode){
         .sort((a, b) => b - a)
         .flatMap(skill => shuffle(bySkill[skill]));
 
-    // Distribuição: times completos em round-robin, sobra vai pro banco (último time)
-    if (_fs > 0) {
+    if (useFormationSize) {
+        // Distribuição: times completos em round-robin, sobra vai pro banco (último time)
         const leftover = pool.length % _fs;
         const hasBench = leftover >= 2 && teamCount > 2;
         const playCount = hasBench ? teamCount - 1 : teamCount;
@@ -1361,13 +1373,15 @@ function buildTeamsAttempt(pool, formation, mode){
             teams[idx < mainEnd ? idx % playCount : teamCount - 1].players.push(player);
         });
     } else {
+        // Distribuição igual (round-robin simples)
         sorted.forEach((player, idx) => {
             teams[idx % teamCount].players.push(player);
         });
     }
 
-    const score = calculateScore(teams, formation, mode, _fs);
-    const confidence = calculateConfidence(teams, formation, mode, _fs);
+    const effectiveFs = useFormationSize ? _fs : -1;
+    const score = calculateScore(teams, formation, mode, effectiveFs);
+    const confidence = calculateConfidence(teams, formation, mode, effectiveFs);
 
     return { teams, score, confidence };
 }
