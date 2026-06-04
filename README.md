@@ -36,10 +36,10 @@ Disponível como **PWA** (instala direto pelo browser) e em breve na **Google Pl
 
 | Esporte | Formações disponíveis (Premium) |
 |---|---|
-| 🏐 **Vôlei** | 5x1, 6x2, 4x2, Livre, Areia 2x2, Quarteto 4x4 |
-| ⚽ **Futebol** | Society 7x7, Futsal 5x5, Campo 11x11, Pelada Livre |
+| 🏐 **Vôlei** | 5x1, 6x2, 4x2, 6x0, Livre, Areia 2x2, Quarteto 4x4 |
+| ⚽ **Futebol** | Society 7, Society 8, Futsal 5x5, Campo 11x11, Pelada Livre |
 | 🏀 **Basquete** | 5x5 Oficial, 3x3 Olímpico, Livre |
-| 🤾 **Handebol** | 7x7 Oficial, Formações Livres |
+| 🤾 **Handebol** | 7x7 Oficial, Livre |
 
 ---
 
@@ -50,18 +50,19 @@ Disponível como **PWA** (instala direto pelo browser) e em breve na **Google Pl
 - ✅ Nota técnica por estrelas (1–5)
 - ✅ Posição principal e secundária
 - ✅ Filtro por gênero
-- ✅ Sorteio aleatório básico (2 times)
+- ✅ Sorteio equilibrado com a formação padrão do esporte
+- ✅ Lógica inteligente de times: preenche o máximo de times completos, resto vai pro próximo
 - ✅ Funciona offline (PWA)
 - ✅ Dark mode automático
 
 ### Premium por esporte — R$ 9,90 · compra única
-- 🔒 Formações específicas com posições obrigatórias
-- 🔒 Modos: Pelada, Treino, Campeonato, Misto (% feminino)
+- 🔒 Escolha de formação (5x1, 6x2, futsal, society, 3x3 etc.)
+- 🔒 Posições obrigatórias por formação (goleiro, líbero, levantador…)
+- 🔒 Modos: Pelada, Treino, Campeonato, Feminino
 - 🔒 Equilíbrio avançado — 500 tentativas, menor desvio de skill
 - 🔒 Refazer sorteio mantendo a mesma configuração
 - 🔒 Arrastar jogador entre times — segura e arrasta para trocar
 - 🔒 Cadeado por jogador — trava até 2 por time; ficam fixos no Refazer
-- 🔒 Sugestão automática de troca para equilibrar os times
 - 🔒 Sem anúncios neste esporte
 
 ---
@@ -181,10 +182,14 @@ node take-screenshots.js
 
 - [x] PWA completo com 4 esportes
 - [x] Sistema free/premium por esporte
+- [x] Lógica de sorteio: times completos + overflow (free e premium)
+- [x] Formação 6x0 no vôlei (sem líbero)
 - [x] Cadeado e drag-to-swap de jogadores
 - [x] APK / AAB gerado e assinado
-- [x] Assets da Play Store prontos
+- [x] Assets da Play Store prontos (ícones, screenshots, feature graphic)
+- [x] assetlinks.json configurado para TWA
 - [ ] Publicar na Google Play Store
+- [ ] Remover gatilho dev (7 toques no título) antes de publicar
 - [ ] Integrar Google Play Billing (IAP real)
 - [ ] Integrar AdMob (banner nativo no TWA)
 - [ ] Detecção de plataforma iOS → mensagem "disponível no Android"
