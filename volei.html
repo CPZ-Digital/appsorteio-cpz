@@ -1327,27 +1327,24 @@ function drawTeams(formation, mode){
 
 function buildTeamsAttempt(pool, formation, mode){
     const _fs = FORMATIONS[formation]?.size ?? -1;
-    // Areia/quarteto têm tamanho de time fixo e estrito
-    const isStrict = formation === "areia" || formation === "quarteto";
 
     let teamCount;
     let useFormationSize = false;
 
     if (_fs > 0) {
         const full = Math.floor(pool.length / _fs);
-        if (isStrict || full >= 2) {
-            // Usa tamanho da formação quando dá para 2+ times completos (ou é estrita)
+        if (full >= 1) {
+            // Fecha o máximo de times completos; qualquer sobra vai pro último time
             const leftover = pool.length % _fs;
-            teamCount = Math.max(2, full + (leftover >= 2 ? 1 : 0));
+            teamCount = Math.max(2, full + (leftover > 0 ? 1 : 0));
             useFormationSize = true;
         } else {
-            // Não cabe 2 times completos → distribui igualmente como "livre"
+            // Nem 1 time completo possível → distribui igualmente
             teamCount = getTeamCount(pool.length);
         }
     } else {
         teamCount = getTeamCount(pool.length);
     }
-    teamCount = Math.max(2, teamCount);
 
     const teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
 
@@ -1364,13 +1361,15 @@ function buildTeamsAttempt(pool, formation, mode){
         .flatMap(skill => shuffle(bySkill[skill]));
 
     if (useFormationSize) {
-        // Distribuição: times completos em round-robin, sobra vai pro banco (último time)
-        const leftover = pool.length % _fs;
-        const hasBench = leftover >= 2 && teamCount > 2;
-        const playCount = hasBench ? teamCount - 1 : teamCount;
-        const mainEnd = playCount * _fs;
+        // Times completos: round-robin para equilibrar skill
+        // Sobra: vai direto pro último time
+        const full = Math.floor(pool.length / _fs);
         sorted.forEach((player, idx) => {
-            teams[idx < mainEnd ? idx % playCount : teamCount - 1].players.push(player);
+            if (idx < full * _fs) {
+                teams[idx % full].players.push(player);
+            } else {
+                teams[teamCount - 1].players.push(player);
+            }
         });
     } else {
         // Distribuição igual (round-robin simples)
