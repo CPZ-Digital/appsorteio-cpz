@@ -1326,14 +1326,11 @@ function drawTeams(formation, mode){
 function buildTeamsAttempt(pool, formation, mode){
     let teams = [];
 
-    if (formation === "areia" || formation === "quarteto") {
-        const formSize = FORMATIONS[formation].size;
-        const teamCount = Math.max(2, Math.floor(pool.length / formSize));
-        teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
-    } else {
-        const teamCount = formation === "livre" ? getTeamCount(pool.length) : 2;
-        teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
-    }
+    const _fs = FORMATIONS[formation]?.size ?? -1;
+    const teamCount = _fs > 0
+        ? Math.max(2, Math.min(Math.ceil(pool.length / _fs), Math.floor(pool.length / 2)))
+        : getTeamCount(pool.length);
+    teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
 
     // Agrupa por skill, embaralha dentro de cada grupo → snake draft real entre iterações
     const bySkill = {};

@@ -500,7 +500,8 @@ function drawTeams(formation,mode){
 }
 
 function buildTeamsAttempt(pool,formation,mode){
-    const n=(formation==="treino"||formation==="livre")?getTeamCount(pool.length):2;
+    const _fs=FORMATIONS[formation]?.size??-1;
+    const n=_fs>0?Math.max(2,Math.min(Math.ceil(pool.length/_fs),Math.floor(pool.length/2))):getTeamCount(pool.length);
     const teams=Array.from({length:n},(_,i)=>({name:`Time ${i+1}`,players:[]}));
     const bySkill={};
     pool.forEach(p=>{ const s=p.skill??3; if(!bySkill[s]) bySkill[s]=[]; bySkill[s].push(p); });
