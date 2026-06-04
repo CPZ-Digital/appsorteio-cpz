@@ -501,18 +501,16 @@ function drawTeams(formation,mode){
 function buildTeamsAttempt(pool,formation,mode){
     const _fs=FORMATIONS[formation]?.size??-1;
     let teamCount, useFormationSize=false;
-    if(_fs>0){
-        const full=Math.floor(pool.length/_fs);
-        const leftover=pool.length%_fs; if(full>=2||(full===1&&leftover>0)){ teamCount=Math.max(2,full+(leftover>0?1:0)); useFormationSize=true; }
-        else { teamCount=2; }
-    } else { teamCount=getTeamCount(pool.length); }
+    const full=_fs>0?Math.floor(pool.length/_fs):0;
+    const leftover=_fs>0?pool.length%_fs:0;
+    if(_fs>0){ teamCount=Math.max(2,full+(leftover>0?1:0)); useFormationSize=true; }
+    else { teamCount=getTeamCount(pool.length); }
     const teams=Array.from({length:teamCount},(_,i)=>({name:`Time ${i+1}`,players:[]}));
     const bySkill={};
     pool.forEach(p=>{ const s=p.skill??3; if(!bySkill[s]) bySkill[s]=[]; bySkill[s].push(p); });
     const sorted=Object.keys(bySkill).map(Number).sort((a,b)=>b-a).flatMap(s=>shuffle(bySkill[s]));
     if(useFormationSize){
-        const full=Math.floor(pool.length/_fs);
-        sorted.forEach((p,i)=>{ if(i<full*_fs) teams[i%full].players.push(p); else teams[teamCount-1].players.push(p); });
+        sorted.forEach((p,i)=>{ if(full>0&&i<full*_fs) teams[i%full].players.push(p); else teams[Math.min(full,teamCount-1)].players.push(p); });
     } else { sorted.forEach((p,i)=>teams[i%teamCount].players.push(p)); }
     const eFs=useFormationSize?_fs:-1;
     return {teams, score:calculateScore(teams,formation,mode,eFs), confidence:calculateConfidence(teams,formation,mode,eFs)};

@@ -1331,17 +1331,12 @@ function buildTeamsAttempt(pool, formation, mode){
     let teamCount;
     let useFormationSize = false;
 
+    const full = _fs > 0 ? Math.floor(pool.length / _fs) : 0;
+    const leftover = _fs > 0 ? pool.length % _fs : 0;
+
     if (_fs > 0) {
-        const full = Math.floor(pool.length / _fs);
-        const leftover = pool.length % _fs;
-        if (full >= 2 || (full === 1 && leftover > 0)) {
-            // Fecha o máximo de times completos; qualquer sobra vai pro último time
-            teamCount = Math.max(2, full + (leftover > 0 ? 1 : 0));
-            useFormationSize = true;
-        } else {
-            // Não cabe 2 times completos → 2 times iguais
-            teamCount = 2;
-        }
+        teamCount = Math.max(2, full + (leftover > 0 ? 1 : 0));
+        useFormationSize = true;
     } else {
         teamCount = getTeamCount(pool.length);
     }
@@ -1361,18 +1356,16 @@ function buildTeamsAttempt(pool, formation, mode){
         .flatMap(skill => shuffle(bySkill[skill]));
 
     if (useFormationSize) {
-        // Times completos: round-robin para equilibrar skill
-        // Sobra: vai direto pro último time
-        const full = Math.floor(pool.length / _fs);
+        // Times completos: round-robin entre eles para equilibrar skill
+        // Sobra vai para teams[full] (próximo time após os completos)
         sorted.forEach((player, idx) => {
-            if (idx < full * _fs) {
+            if (full > 0 && idx < full * _fs) {
                 teams[idx % full].players.push(player);
             } else {
-                teams[teamCount - 1].players.push(player);
+                teams[Math.min(full, teamCount - 1)].players.push(player);
             }
         });
     } else {
-        // Distribuição igual (round-robin simples)
         sorted.forEach((player, idx) => {
             teams[idx % teamCount].players.push(player);
         });
