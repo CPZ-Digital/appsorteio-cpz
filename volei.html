@@ -1327,7 +1327,9 @@ function buildTeamsAttempt(pool, formation, mode){
     let teams = [];
 
     if (formation === "areia" || formation === "quarteto") {
-        teams = [{ name: "Time 1", players: [] }, { name: "Time 2", players: [] }];
+        const formSize = FORMATIONS[formation].size;
+        const teamCount = Math.max(2, Math.floor(pool.length / formSize));
+        teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
     } else {
         const teamCount = formation === "livre" ? getTeamCount(pool.length) : 2;
         teams = Array.from({ length: teamCount }, (_, i) => ({ name: `Time ${i + 1}`, players: [] }));
