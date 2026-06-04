@@ -55,6 +55,32 @@ function initPremiumUI(sport, sportName) {
     if (buyBtn) buyBtn.addEventListener('click', () => {
         _showToast('Em breve! Disponível quando o app for lançado na Play Store 🚀', 4000);
     });
+
+    _initDevTrigger(sport, sportName);
+}
+
+function _initDevTrigger(sport, sportName) {
+    const title = document.querySelector('.brand h1');
+    if (!title) return;
+    let taps = 0, timer = null;
+    title.addEventListener('click', () => {
+        taps++;
+        clearTimeout(timer);
+        timer = setTimeout(() => { taps = 0; }, 1500);
+        if (taps >= 7) {
+            taps = 0;
+            clearTimeout(timer);
+            if (isPremium(sport)) {
+                revokePremium(sport);
+                clearTeamLocks(sport);
+                _showToast(`🔓 ${sportName} voltou para Free`, 2500);
+            } else {
+                unlockPremium(sport);
+                _showToast(`⭐ ${sportName} Premium ativado`, 2500);
+            }
+            setTimeout(() => location.reload(), 800);
+        }
+    });
 }
 
 // ── CADEADO + DRAG-TO-SWAP ────────────────────────────────────────────
