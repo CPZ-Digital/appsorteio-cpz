@@ -171,11 +171,30 @@ html[data-theme='dark'] .sport-card.handebol .sport-badge{ background:#2e1065;co
         <img src="cpz-assinatura.png" alt="CPZ">
     </footer>
 </main>
+
+<div id="adBanner" style="position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--surface);border-top:1px solid var(--line);display:none;align-items:center;justify-content:center;z-index:100;gap:8px;">
+    <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);opacity:0.6;">Publicidade</span>
+    <div style="flex:1;max-width:320px;height:50px;background:var(--surface-soft);border-radius:6px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:11px;color:var(--muted);">AdMob Banner</span>
+    </div>
+</div>
 <script>
 (function(){
     const dark = window.matchMedia("(prefers-color-scheme: dark)");
     document.documentElement.dataset.theme = dark.matches ? "dark" : "light";
     dark.addEventListener("change", e => { document.documentElement.dataset.theme = e.matches ? "dark" : "light"; });
+
+    // Banner de anúncio: mostra se o usuário não comprou todos os esportes
+    const ALL_SPORTS = ['volei','futebol','basquete','handebol'];
+    try {
+        const purchases = JSON.parse(localStorage.getItem('sorteia-purchases-v1')) || [];
+        const allPremium = ALL_SPORTS.every(s => purchases.includes(s));
+        if (!allPremium) {
+            const banner = document.getElementById('adBanner');
+            banner.style.display = 'flex';
+            document.querySelector('.app').style.paddingBottom = '74px';
+        }
+    } catch {}
 })();
 if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }
 </script>
