@@ -1339,8 +1339,8 @@ function buildTeamsAttempt(pool, formation, mode){
             teamCount = Math.max(2, full + (leftover > 0 ? 1 : 0));
             useFormationSize = true;
         } else {
-            // Não dá pra preencher 2 times → distribui igualmente
-            teamCount = getTeamCount(pool.length);
+            // Não cabe 2 times completos → 2 times iguais
+            teamCount = 2;
         }
     } else {
         teamCount = getTeamCount(pool.length);

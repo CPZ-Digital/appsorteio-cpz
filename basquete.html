@@ -504,7 +504,7 @@ function buildTeamsAttempt(pool,formation,mode){
     if(_fs>0){
         const full=Math.floor(pool.length/_fs);
         const leftover=pool.length%_fs; if(full>=2||(full===1&&leftover>0)){ teamCount=Math.max(2,full+(leftover>0?1:0)); useFormationSize=true; }
-        else { teamCount=getTeamCount(pool.length); }
+        else { teamCount=2; }
     } else { teamCount=getTeamCount(pool.length); }
     const teams=Array.from({length:teamCount},(_,i)=>({name:`Time ${i+1}`,players:[]}));
     const bySkill={};
