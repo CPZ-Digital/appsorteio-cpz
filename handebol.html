@@ -300,23 +300,37 @@ textarea{ min-height:60px; resize:vertical; font-family:var(--font); }
         <div class="dialog-body">
             <div style="text-align:center;margin-bottom:16px;">
                 <div style="font-size:44px;margin-bottom:8px;">🏆</div>
-                <p style="font-weight:800;font-size:16px;margin:0 0 4px;">Desbloqueie tudo neste esporte</p>
-                <p style="color:var(--muted);font-size:13px;margin:0;">Pague uma vez, use para sempre</p>
+                <p style="font-weight:800;font-size:15px;margin:0 0 3px;">Modo Premium</p>
+                <p style="color:var(--muted);font-size:12px;margin:0;">Pague uma vez, use para sempre</p>
             </div>
-            <ul style="list-style:none;padding:0;margin:0 0 16px;display:grid;gap:8px;">
-                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Formações (7x7 oficial, formações livres...)</li>
+            <ul style="list-style:none;padding:0;margin:0 0 14px;display:grid;gap:6px;">
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Formações avançadas por esporte</li>
                 <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Modos de jogo (Treino, Campeonato, Misto)</li>
-                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Equilíbrio avançado por posição</li>
-                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Refazer com mesma configuração</li>
-                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Sem anúncios neste esporte</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Refazer e travar jogadores</li>
+                <li style="display:flex;gap:8px;align-items:center;font-size:13px;font-weight:500;"><span style="color:var(--positive);font-weight:800;">✓</span> Sem anúncios no esporte desbloqueado</li>
             </ul>
-            <div style="text-align:center;background:var(--accent-soft);border-radius:12px;padding:12px 16px;margin-bottom:16px;">
-                <span style="font-size:26px;font-weight:900;color:var(--accent);">R$ 9,90</span>
-                <p style="color:var(--muted);font-size:11px;margin:2px 0 0;">compra única · só este esporte</p>
-            </div>
-            <div style="display:grid;gap:8px;">
-                <button class="btn" id="unlockBtn" style="background:linear-gradient(135deg,#d97706,#f59e0b);font-size:15px;">🔒 Comprar — Em breve</button>
-                
+            <div style="display:grid;gap:10px;">
+                <div style="border:2px solid var(--accent);border-radius:12px;padding:10px 14px;position:relative;">
+                    <span style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:9px;font-weight:800;padding:2px 10px;border-radius:20px;white-space:nowrap;letter-spacing:0.05em;">MELHOR VALOR</span>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                        <div>
+                            <p style="margin:0;font-weight:700;font-size:13px;">Pacote Completo</p>
+                            <p style="margin:0;color:var(--muted);font-size:11px;">Vôlei + Futebol + Basquete + Handebol</p>
+                        </div>
+                        <span style="font-size:20px;font-weight:900;color:var(--accent);">R$ 23,99</span>
+                    </div>
+                    <button class="btn" id="unlockBtn" style="width:100%;background:linear-gradient(135deg,#d97706,#f59e0b);font-size:14px;">🏆 Comprar Pacote — Em breve</button>
+                </div>
+                <div style="border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                        <div>
+                            <p style="margin:0;font-weight:700;font-size:13px;" id="singleSportLabel">Só este esporte</p>
+                            <p style="margin:0;color:var(--muted);font-size:11px;">Apenas esta modalidade</p>
+                        </div>
+                        <span style="font-size:20px;font-weight:900;">R$ 7,99</span>
+                    </div>
+                    <button class="btn secondary" id="unlockSingleBtn" style="width:100%;font-size:14px;">🔒 Comprar — Em breve</button>
+                </div>
             </div>
         </div>
     </div>

@@ -49,17 +49,27 @@ function initPremiumUI(sport, sportName) {
             : 'none';
     });
 
-    const modal        = document.getElementById('paywallModal');
-    const closeBtn     = document.getElementById('closePaywallBtn');
-    const buyBtn       = document.getElementById('unlockBtn');
-    const paywallTitle = document.getElementById('paywallTitle');
+    const modal           = document.getElementById('paywallModal');
+    const closeBtn        = document.getElementById('closePaywallBtn');
+    const buyBtn          = document.getElementById('unlockBtn');
+    const buySingleBtn    = document.getElementById('unlockSingleBtn');
+    const singleLabel     = document.getElementById('singleSportLabel');
+    const paywallTitle    = document.getElementById('paywallTitle');
 
     if (!modal) return;
-    if (paywallTitle) paywallTitle.textContent = `${sportName} Premium`;
+    if (paywallTitle) paywallTitle.textContent = 'Premium';
+    if (singleLabel)  singleLabel.textContent  = `Só o ${sportName}`;
     if (paywallBtn) paywallBtn.addEventListener('click', () => modal.classList.add('show'));
     if (closeBtn)   closeBtn.addEventListener('click',   () => modal.classList.remove('show'));
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('show'); });
     if (buyBtn) buyBtn.addEventListener('click', () => {
+        // TODO: integrar Google Play Billing (produto: com.cpz.sorteiaai.pacote_completo)
+        // Ao confirmar: unlockPremium('volei'); unlockPremium('futebol'); unlockPremium('basquete'); unlockPremium('handebol');
+        _showToast('Em breve! Disponível quando o app for lançado na Play Store 🚀', 4000);
+    });
+    if (buySingleBtn) buySingleBtn.addEventListener('click', () => {
+        // TODO: integrar Google Play Billing (produto: com.cpz.sorteiaai.[sport])
+        // Ao confirmar: unlockPremium(sport);
         _showToast('Em breve! Disponível quando o app for lançado na Play Store 🚀', 4000);
     });
 
